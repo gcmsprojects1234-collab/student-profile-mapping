@@ -1,0 +1,765 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1020">
+    <meta name="description" content="George College of Management & Science — Student Profile Mapping, personality insights and student development.">
+    <title>Student Profile Mapping | George College</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/config.js"></script>
+
+    <style>
+        /* Login mode toggle */
+        .login-mode-toggle {
+            display: flex;
+            gap: 6px;
+            padding: 5px;
+            margin: 0 0 24px;
+            border: 1px solid rgba(185, 166, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .mode-button {
+            flex: 1;
+            padding: 11px 14px;
+            border: 0;
+            border-radius: 9px;
+            color: #c6c4d5;
+            background: transparent;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .mode-button.active {
+            color: #fff;
+            background: linear-gradient(135deg, #8065e9, #5942b8);
+            box-shadow: 0 4px 16px rgba(100, 75, 200, 0.25);
+        }
+
+        .mode-button:focus-visible {
+            outline: 2px solid #b9a6ff;
+            outline-offset: 3px;
+        }
+
+        #adminLoginForm label {
+            display: block;
+            margin: 15px 0 7px;
+        }
+
+        #adminLoginForm input {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #adminMessage {
+            color: #ff9baf;
+            margin-top: 12px;
+        }
+
+        #adminLoginForm[hidden],
+        #loginForm[hidden] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-glow glow-one"></div>
+    <div class="page-glow glow-two"></div>
+
+    <header class="navbar">
+        <a class="college-brand" href="#home">
+            <div class="brand-mark">
+                <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <path d="M5 17L24 7L43 17L24 27L5 17Z"
+                          stroke="currentColor" stroke-width="2.5"
+                          stroke-linejoin="round"/>
+                    <path d="M12 21V31C19 37 29 37 36 31V21"
+                          stroke="currentColor" stroke-width="2.5"
+                          stroke-linecap="round"/>
+                    <path d="M43 17V29" stroke="currentColor"
+                          stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="43" cy="32" r="2.5" fill="currentColor"/>
+                </svg>
+            </div>
+
+            <div class="brand-copy">
+                <span class="college-name">GEORGE COLLEGE</span>
+                <span class="college-subtitle">OF MANAGEMENT & SCIENCE</span>
+            </div>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle" type="button"
+                aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+
+        <nav class="nav-links" id="navLinks">
+            <a href="#home" class="nav-link active">Home</a>
+            <a href="#about" class="nav-link">About SPM</a>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#journey" class="nav-link">Your Journey</a>
+            <button class="nav-login" type="button" data-open-login>
+                Student Login <span aria-hidden="true">↗</span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero section-shell" id="home">
+            <div class="hero-content reveal">
+                <div class="eyebrow">
+                    <span class="status-dot"></span>
+                    STUDENT DEVELOPMENT PLATFORM
+                </div>
+
+                <h1>
+                    Discover who you are.<br>
+                    <span class="gradient-text">Define who you become.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Every student has a unique story, strengths and aspirations.
+                    Explore your personality, understand your potential and take
+                    a more confident step towards your future.
+                </p>
+
+                <div class="hero-actions">
+                    <button class="button button-primary" type="button" data-open-login>
+                        Begin Your Journey <span aria-hidden="true">→</span>
+                    </button>
+
+                    <a class="button button-secondary" href="#about">
+                        Explore the Platform <span aria-hidden="true">↓</span>
+                    </a>
+                </div>
+
+                <div class="hero-trust">
+                    <div class="trust-icon">✦</div>
+                    <p>
+                        <strong>Know yourself better.</strong>
+                        <span>Grow with purpose.</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="hero-visual reveal"
+                 aria-label="Illustration of a student personality insights dashboard">
+                <div class="orbit orbit-outer"></div>
+                <div class="orbit orbit-inner"></div>
+
+                <div class="floating-label label-top">
+                    <span class="mini-icon mini-purple">✧</span>
+                    <span>
+                        <strong>Self-discovery</strong>
+                        <small>Your journey starts here</small>
+                    </span>
+                </div>
+
+                <div class="insight-card main-insight">
+                    <div class="insight-header">
+                        <div>
+                            <span class="card-kicker">YOUR PERSONALITY</span>
+                            <h3>Growth &amp; Insights</h3>
+                        </div>
+                        <div class="card-menu">···</div>
+                    </div>
+
+                    <div class="chart-area">
+                        <div class="chart-ring">
+                            <div class="ring-center">
+                                <span class="ring-star">✦</span>
+                                <strong>YOU</strong>
+                                <small>Unique by design</small>
+                            </div>
+                        </div>
+
+                        <div class="chart-label chart-label-one">
+                            <span class="chart-dot dot-violet"></span>
+                            Self-awareness
+                        </div>
+                        <div class="chart-label chart-label-two">
+                            <span class="chart-dot dot-gold"></span>
+                            Personal growth
+                        </div>
+                        <div class="chart-label chart-label-three">
+                            <span class="chart-dot dot-blue"></span>
+                            Future goals
+                        </div>
+                    </div>
+
+                    <div class="insight-footer">
+                        <span class="footer-sparkle">✧</span>
+                        <span>Your potential is worth exploring.</span>
+                    </div>
+                </div>
+
+                <div class="floating-label label-bottom">
+                    <div class="mini-avatar">S</div>
+                    <span>
+                        <strong>Student Profile</strong>
+                        <small>Made for your growth</small>
+                    </span>
+                    <span class="label-check">✓</span>
+                </div>
+
+                <div class="decorative-star star-one">✳</div>
+                <div class="decorative-star star-two">✧</div>
+                <div class="decorative-star star-three">✦</div>
+            </div>
+        </section>
+
+        <section class="highlights section-shell reveal" aria-label="Platform highlights">
+            <div class="highlight-item">
+                <div class="highlight-icon purple-icon">◎</div>
+                <div>
+                    <h3>Know Yourself</h3>
+                    <p>Explore your preferences and strengths.</p>
+                </div>
+            </div>
+
+            <div class="highlight-divider"></div>
+
+            <div class="highlight-item">
+                <div class="highlight-icon gold-icon">↗</div>
+                <div>
+                    <h3>Grow With Purpose</h3>
+                    <p>Identify areas for personal development.</p>
+                </div>
+            </div>
+
+            <div class="highlight-divider"></div>
+
+            <div class="highlight-item">
+                <div class="highlight-icon blue-icon">⌘</div>
+                <div>
+                    <h3>Plan Your Future</h3>
+                    <p>Reflect on interests and career goals.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section section-shell" id="about">
+            <div class="about-copy reveal">
+                <span class="section-label">ABOUT THE PLATFORM</span>
+                <h2>
+                    A little more understanding.<br>
+                    <span class="gradient-text">A lot more possibility.</span>
+                </h2>
+
+                <p>
+                    Student Profile Mapping (SPM) is designed to support
+                    self-reflection and student development. Through a guided
+                    assessment, you can explore your personal preferences,
+                    reflect on your strengths and discover areas where you
+                    may want to grow.
+                </p>
+
+                <a href="#features" class="text-link">
+                    Discover the features <span aria-hidden="true">→</span>
+                </a>
+            </div>
+
+            <div class="about-visual reveal">
+                <div class="about-panel panel-back"></div>
+
+                <div class="about-panel panel-front">
+                    <div class="panel-top">
+                        <span class="panel-dot"></span>
+                        <span class="panel-dot"></span>
+                        <span class="panel-dot"></span>
+                        <span class="panel-caption">YOUR GROWTH SPACE</span>
+                    </div>
+
+                    <div class="profile-symbol">
+                        <svg viewBox="0 0 120 120" fill="none" aria-hidden="true">
+                            <circle cx="60" cy="60" r="53" stroke="#B9A6FF"
+                                    stroke-opacity=".25" stroke-width="1.5"/>
+                            <circle cx="60" cy="60" r="40" stroke="#B9A6FF"
+                                    stroke-opacity=".5" stroke-width="1.5"
+                                    stroke-dasharray="4 5"/>
+                            <circle cx="60" cy="43" r="15" fill="#B9A6FF"/>
+                            <path d="M29 91C32 72 43 63 60 63C77 63 88 72 91 91"
+                                  fill="#B9A6FF"/>
+                        </svg>
+                    </div>
+
+                    <div class="about-stat">
+                        <span>PERSONAL GROWTH</span>
+                        <strong>One step at a time.</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section section-shell" id="features">
+            <div class="section-heading reveal">
+                <span class="section-label">WHAT YOU CAN EXPLORE</span>
+                <h2>Designed around <span class="gradient-text">your growth.</span></h2>
+                <p>Explore your student journey through a simple, guided experience.</p>
+            </div>
+
+            <div class="feature-grid">
+                <article class="feature-card reveal">
+                    <div class="feature-icon feature-icon-purple">◎</div>
+                    <span class="feature-number">01 / PROFILE</span>
+                    <h3>Student Profile</h3>
+                    <p>Share your personal and academic background to begin your journey.</p>
+                </article>
+
+                <article class="feature-card reveal">
+                    <div class="feature-icon feature-icon-gold">✧</div>
+                    <span class="feature-number">02 / REFLECTION</span>
+                    <h3>Guided Assessment</h3>
+                    <p>Answer questions about your preferences, thinking and approach to tasks.</p>
+                </article>
+
+                <article class="feature-card reveal">
+                    <div class="feature-icon feature-icon-blue">↗</div>
+                    <span class="feature-number">03 / INSIGHTS</span>
+                    <h3>Profile Report</h3>
+                    <p>Review your responses and reflect on possible areas for development.</p>
+                </article>
+
+                <article class="feature-card reveal">
+                    <div class="feature-icon feature-icon-purple">⌁</div>
+                    <span class="feature-number">04 / ACCESS</span>
+                    <h3>Voice Assistance</h3>
+                    <p>Listen to supported instructions and navigate with browser voice features.</p>
+                    <button class="feature-link feature-button" type="button" id="voiceDemo">
+                        Try voice assistance <span>↗</span>
+                    </button>
+                </article>
+            </div>
+        </section>
+
+        <section class="journey-section section-shell" id="journey">
+            <div class="journey-copy reveal">
+                <span class="section-label">YOUR JOURNEY STARTS HERE</span>
+                <h2>Small steps.<br><span class="gradient-text">Meaningful growth.</span></h2>
+                <p>
+                    Take your time, answer honestly and use your results as a
+                    starting point for reflection. Your assessment is an
+                    opportunity to learn more about yourself.
+                </p>
+                <button class="button button-primary" type="button" data-open-login>
+                    Start Your Assessment <span>→</span>
+                </button>
+            </div>
+
+            <div class="journey-steps reveal">
+                <div class="journey-step">
+                    <div class="step-number">01</div>
+                    <div>
+                        <h3>Create your student profile</h3>
+                        <p>Enter your basic academic details to begin.</p>
+                    </div>
+                    <span class="step-arrow">↗</span>
+                </div>
+
+                <div class="journey-step">
+                    <div class="step-number">02</div>
+                    <div>
+                        <h3>Complete the assessment</h3>
+                        <p>Reflect on questions about your preferences and strengths.</p>
+                    </div>
+                    <span class="step-arrow">↗</span>
+                </div>
+
+                <div class="journey-step">
+                    <div class="step-number">03</div>
+                    <div>
+                        <h3>Review your report</h3>
+                        <p>Explore your summary and possible areas for growth.</p>
+                    </div>
+                    <span class="step-arrow">↗</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section section-shell reveal">
+            <div class="cta-decoration"></div>
+            <div class="cta-content">
+                <span class="section-label">YOUR NEXT CHAPTER</span>
+                <h2>Your future begins<br>with <span>understanding yourself.</span></h2>
+                <p>Take the first step towards a more self-aware you.</p>
+                <button class="button button-light" type="button" data-open-login>
+                    Get Started <span>→</span>
+                </button>
+            </div>
+            <div class="cta-symbol" aria-hidden="true">✳</div>
+        </section>
+    </main>
+
+    <!-- Login modal -->
+    <div class="modal-backdrop" id="loginModal" aria-hidden="true">
+        <section class="login-modal" role="dialog" aria-modal="true"
+                 aria-labelledby="modalTitle">
+
+            <button class="modal-close" id="closeModal" type="button"
+                    aria-label="Close login form">×</button>
+
+            <!-- Student / Admin toggle -->
+            <div class="login-mode-toggle" role="group" aria-label="Choose login type">
+                <button type="button" class="mode-button active" id="studentModeBtn"
+                        aria-pressed="true">Student</button>
+                <button type="button" class="mode-button" id="adminModeBtn"
+                        aria-pressed="false">Admin</button>
+            </div>
+
+            <div class="modal-brand">SPM <span id="accessLabel">STUDENT ACCESS</span></div>
+            <span class="section-label" id="welcomeLabel">WELCOME TO YOUR JOURNEY</span>
+            <h2 id="modalTitle">Let's get started.</h2>
+
+            <p class="modal-description" id="modalDescription">
+                Enter your details to continue to your student profile.
+            </p>
+
+            <!-- Student form: kept intact -->
+            <form id="loginForm">
+                <label for="studentName">Full name</label>
+                <input id="studentName" name="studentName" type="text"
+                       placeholder="Enter your full name"
+                       autocomplete="name" required>
+
+                <label for="studentId">Student ID / Roll number</label>
+                <input id="studentId" name="studentId" type="text"
+                       placeholder="Enter your student ID" required>
+
+                <label for="studentEmail">College email address</label>
+                <input id="studentEmail" name="studentEmail" type="email"
+                       placeholder="you@example.com"
+                       autocomplete="email" required>
+
+                <label for="department">Department</label>
+                <select id="department" name="department" required>
+                    <option value="">Select your department</option>
+                    <option value="BCA">BCA</option>
+                    <option value="BBA">BBA</option>
+                    <option value="BOPTM">BOPTM</option>
+                    <option value="BHM">BHM</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <button class="button button-primary modal-submit" type="submit">
+                    Continue to Profile <span aria-hidden="true">→</span>
+                </button>
+
+                <p class="form-message" id="formMessage" role="status"
+                   aria-live="polite"></p>
+            </form>
+
+            <!-- Admin form -->
+            <form id="adminLoginForm" hidden>
+                <label for="adminName">Admin name</label>
+                <input id="adminName" name="adminName" type="text"
+                       placeholder="Enter admin name"
+                       autocomplete="username" required>
+
+                <label for="adminPassword">Password</label>
+                <input id="adminPassword" name="adminPassword" type="password"
+                       placeholder="Enter admin password"
+                       autocomplete="current-password" required>
+
+                <button class="button button-primary modal-submit" type="submit">
+                    Open Reports <span aria-hidden="true">→</span>
+                </button>
+
+                <p class="form-message" id="adminMessage" role="status"
+                   aria-live="polite"></p>
+            </form>
+
+            <p class="privacy-note" id="privacyNote">
+                Please use your own student details. Your login details are kept
+                in this browser session to continue to your profile. Your profile
+                will be submitted to the configured college storage service when
+                you complete the profile form.
+            </p>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-brand">
+            <span class="footer-mark">G</span>
+            <div>
+                <strong>GEORGE COLLEGE OF MANAGEMENT &amp; SCIENCE</strong>
+                <span>Student Profile Mapping</span>
+            </div>
+        </div>
+        <p>Designed to support student reflection and personal development.</p>
+        <span class="copyright">© <span id="currentYear"></span> Student Profile Mapping</span>
+    </footer>
+
+    <script>
+        "use strict";
+
+        // Mobile navigation
+        const menuToggle = document.getElementById("menuToggle");
+        const navLinks = document.getElementById("navLinks");
+
+        menuToggle.addEventListener("click", function () {
+            const opened = navLinks.classList.toggle("nav-open");
+            menuToggle.setAttribute("aria-expanded", String(opened));
+        });
+
+        navLinks.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                navLinks.classList.remove("nav-open");
+                menuToggle.setAttribute("aria-expanded", "false");
+            });
+        });
+
+        // Login modal
+        const loginModal = document.getElementById("loginModal");
+        const closeModal = document.getElementById("closeModal");
+        const loginForm = document.getElementById("loginForm");
+        const adminLoginForm = document.getElementById("adminLoginForm");
+        const formMessage = document.getElementById("formMessage");
+        const adminMessage = document.getElementById("adminMessage");
+
+        const studentModeBtn = document.getElementById("studentModeBtn");
+        const adminModeBtn = document.getElementById("adminModeBtn");
+
+        const accessLabel = document.getElementById("accessLabel");
+        const welcomeLabel = document.getElementById("welcomeLabel");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDescription = document.getElementById("modalDescription");
+        const privacyNote = document.getElementById("privacyNote");
+
+        let loginMode = "student";
+
+        function readStudent() {
+            try {
+                return JSON.parse(sessionStorage.getItem("spmStudent") || "null");
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function openLogin() {
+            loginModal.classList.add("modal-open");
+            loginModal.setAttribute("aria-hidden", "false");
+            document.body.classList.add("modal-active");
+
+            setLoginMode(loginMode);
+
+            const saved = readStudent();
+
+            if (saved) {
+                document.getElementById("studentName").value = saved.name || "";
+                document.getElementById("studentId").value = saved.studentId || "";
+                document.getElementById("studentEmail").value = saved.email || "";
+                document.getElementById("department").value = saved.department || "";
+            }
+
+            window.setTimeout(function () {
+                const target = loginMode === "student"
+                    ? document.getElementById("studentName")
+                    : document.getElementById("adminName");
+
+                target.focus();
+            }, 100);
+        }
+
+        function hideLogin() {
+            loginModal.classList.remove("modal-open");
+            loginModal.setAttribute("aria-hidden", "true");
+            document.body.classList.remove("modal-active");
+        }
+
+        function setLoginMode(mode) {
+            loginMode = mode;
+
+            const isStudent = mode === "student";
+
+            studentModeBtn.classList.toggle("active", isStudent);
+            adminModeBtn.classList.toggle("active", !isStudent);
+
+            studentModeBtn.setAttribute("aria-pressed", String(isStudent));
+            adminModeBtn.setAttribute("aria-pressed", String(!isStudent));
+
+            loginForm.hidden = !isStudent;
+            adminLoginForm.hidden = isStudent;
+
+            // Prevent hidden required fields from blocking submission.
+            loginForm.querySelectorAll("input, select, button")
+                .forEach(function (element) {
+                    element.disabled = !isStudent;
+                });
+
+            adminLoginForm.querySelectorAll("input, button")
+                .forEach(function (element) {
+                    element.disabled = isStudent;
+                });
+
+            accessLabel.textContent = isStudent
+                ? "STUDENT ACCESS"
+                : "ADMIN ACCESS";
+
+            welcomeLabel.textContent = isStudent
+                ? "WELCOME TO YOUR JOURNEY"
+                : "ADMINISTRATOR ACCESS";
+
+            modalTitle.textContent = isStudent
+                ? "Let's get started."
+                : "Welcome, Admin.";
+
+            modalDescription.textContent = isStudent
+                ? "Enter your details to continue to your student profile."
+                : "Enter your admin credentials to open the report page.";
+
+            privacyNote.textContent = isStudent
+                ? "Please use your own student details. Your login details are kept in this browser session to continue to your profile. Your profile will be submitted to the configured college storage service when you complete the profile form."
+                : "Admin access on this page uses demo-only client-side credentials. Do not use this method to protect confidential student reports.";
+
+            formMessage.textContent = "";
+            adminMessage.textContent = "";
+        }
+
+        document.querySelectorAll("[data-open-login]").forEach(function (button) {
+            button.addEventListener("click", openLogin);
+        });
+
+        closeModal.addEventListener("click", hideLogin);
+
+        loginModal.addEventListener("click", function (event) {
+            if (event.target === loginModal) {
+                hideLogin();
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                hideLogin();
+            }
+        });
+
+        studentModeBtn.addEventListener("click", function () {
+            setLoginMode("student");
+        });
+
+        adminModeBtn.addEventListener("click", function () {
+            setLoginMode("admin");
+        });
+
+        // Student login: retain the original navigation behavior.
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            formMessage.textContent = "";
+
+            if (!loginForm.checkValidity()) {
+                loginForm.reportValidity();
+                return;
+            }
+
+            const student = {
+                name: document.getElementById("studentName").value.trim(),
+                studentId: document.getElementById("studentId").value.trim(),
+                email: document.getElementById("studentEmail").value.trim(),
+                department: document.getElementById("department").value
+            };
+
+            if (!student.name || !student.studentId ||
+                !student.email || !student.department) {
+                formMessage.textContent = "Please complete all fields.";
+                return;
+            }
+
+            try {
+                sessionStorage.setItem("spmStudent", JSON.stringify(student));
+                sessionStorage.setItem("studentLoggedIn", "true");
+
+                localStorage.setItem("studentId", student.studentId);
+                localStorage.setItem("studentProfile", JSON.stringify(student));
+
+                window.location.href = "/profile.html";
+            } catch (error) {
+                formMessage.textContent =
+                    "Your browser could not save these details. Please try again.";
+            }
+        });
+
+        // Admin login: demo-only client-side check.
+        // Do not use this for protecting real student information.
+        adminLoginForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            adminMessage.textContent = "";
+
+            if (!adminLoginForm.checkValidity()) {
+                adminLoginForm.reportValidity();
+                return;
+            }
+
+            const name = document.getElementById("adminName").value.trim();
+            const password = document.getElementById("adminPassword").value;
+
+            if (
+                name.toLowerCase() === "soumili" &&
+                password === "soumili"
+            ) {
+                window.location.href = "/report.html";
+            } else {
+                adminMessage.textContent = "Invalid admin name or password.";
+            }
+        });
+
+        // Reveal animations
+        if ("IntersectionObserver" in window) {
+            const revealObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("revealed");
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+
+            document.querySelectorAll(".reveal").forEach(function (element) {
+                revealObserver.observe(element);
+            });
+        } else {
+            document.querySelectorAll(".reveal").forEach(function (element) {
+                element.classList.add("revealed");
+            });
+        }
+
+        // English voice assistance
+        document.getElementById("voiceDemo").addEventListener("click", function () {
+            if (!("speechSynthesis" in window)) {
+                alert("Voice playback is not supported by this browser.");
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const message = new SpeechSynthesisUtterance(
+                "Welcome to Student Profile Mapping at George College of Management and Science. " +
+                "Discover your strengths, reflect on your personality, and explore your future goals. " +
+                "Select Student Login or Begin Your Journey to get started."
+            );
+
+            message.lang = "en-IN";
+            message.rate = 0.92;
+            window.speechSynthesis.speak(message);
+        });
+
+        // Footer year
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+
+        // Start in Student mode
+        setLoginMode("student");
+    </script>
+</body>
+</html>

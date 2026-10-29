@@ -1,0 +1,953 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e1d">
+<title>Student Assessment | George College</title>
+
+<style>
+:root {
+    --bg:#0b0e1d;
+    --panel:#151b31;
+    --panel2:#1b2440;
+    --gold:#edc96c;
+    --purple:#a78bfa;
+    --blue:#82a9ff;
+    --text:#f3f4ff;
+    --muted:#a4aec6;
+    --border:rgba(174,188,230,.15);
+    --input:#10172c;
+    --teal:#72d9c4;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.65
+}
+button,a,input{font:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{
+    outline:3px solid var(--gold);outline-offset:3px
+}
+.page{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 5% 15%,rgba(65,53,139,.17),transparent 35%),
+      radial-gradient(ellipse at 95% 65%,rgba(54,88,151,.13),transparent 32%),
+      var(--bg)
+}
+.navbar{
+    position:sticky;top:0;z-index:10;
+    background:rgba(11,14,29,.94);backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border)
+}
+.nav-inner{
+    max-width:1120px;width:calc(100% - 36px);min-height:76px;
+    margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px
+}
+.brand{display:flex;align-items:center;gap:13px;text-decoration:none}
+.brand-icon{
+    width:50px;height:50px;border:1px solid rgba(237,201,108,.4);
+    border-radius:15px;background:#1b1b2b;color:var(--gold);
+    display:grid;place-items:center;font-size:26px
+}
+.brand-title{font-size:16px;font-weight:850;line-height:1.3;color:var(--text)}
+.brand-subtitle{font-size:9px;letter-spacing:1.4px;color:#9ca5bd}
+.nav-link{color:#b4bdd1;text-decoration:none;font-size:12px}
+.container{max-width:950px;width:calc(100% - 36px);margin:auto}
+.hero{padding:42px 0 22px}
+.eyebrow{
+    display:inline-flex;align-items:center;gap:9px;padding:9px 13px;
+    border:1px solid rgba(237,201,108,.23);border-radius:9px;
+    background:rgba(237,201,108,.035);color:#e9d5a3;
+    font-size:10px;font-weight:850;letter-spacing:1.4px
+}
+.dot{width:8px;height:8px;background:#78d6b0;border-radius:50%;box-shadow:0 0 12px #78d6b077}
+h1{font-size:clamp(31px,5vw,46px);line-height:1.2;letter-spacing:-1px;margin:20px 0 12px}
+.gradient{
+    background:linear-gradient(100deg,var(--gold),#d7a8f7 52%,#88aaff);
+    -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.hero p{max-width:720px;color:var(--muted);line-height:1.9;margin:0}
+.voice-card,.progress-card,.question-card,.bottom-card{
+    border:1px solid var(--border);border-radius:16px;
+    background:linear-gradient(130deg,rgba(25,33,60,.96),rgba(17,23,43,.96))
+}
+.voice-card{
+    display:flex;justify-content:space-between;align-items:center;gap:15px;
+    flex-wrap:wrap;padding:17px 19px;margin:20px 0
+}
+.voice-card strong{display:block;font-size:13px}
+.voice-card p{margin:3px 0 0;font-size:11px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{
+    border:1px solid #3a4568;background:#1a2340;color:#e6eaff;
+    border-radius:9px;padding:10px 13px;font-size:11px;font-weight:750;cursor:pointer
+}
+.btn:hover{border-color:var(--purple)}
+.btn.gold{background:var(--gold);color:#17182a;border-color:var(--gold)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.status{width:100%;margin:0;color:var(--teal);font-size:11px}
+.progress-card{padding:20px 22px;margin:20px 0}
+.progress-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px}
+.progress-top strong{font-size:12px}
+.percent{color:var(--gold);font-weight:850}
+.track{height:6px;background:#2b3450;border-radius:20px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--purple),var(--blue));transition:width .25s}
+.progress-caption{font-size:11px;color:#98a5c0;margin-top:10px}
+.section-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}
+.tab{
+    padding:9px 13px;border-radius:9px;border:1px solid var(--border);
+    background:#12182b;color:#aab5cf;font-size:11px;cursor:pointer
+}
+.tab.active{background:#292746;color:var(--gold);border-color:#73639b}
+.question-card{overflow:hidden;margin:20px 0}
+.section-head{
+    display:flex;gap:13px;align-items:center;padding:20px 23px;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(100deg,rgba(37,43,73,.55),rgba(22,29,53,.25))
+}
+.section-num{
+    display:grid;place-items:center;width:43px;height:43px;flex-shrink:0;
+    border:1px solid #edc96c38;border-radius:12px;
+    background:#edc96c12;color:var(--gold);font-weight:850
+}
+.section-head h2{font-size:16px;margin:0 0 3px}
+.section-head p{font-size:11px;color:var(--muted);margin:0}
+.section-body{padding:22px}
+.question{padding:18px 0;border-bottom:1px solid var(--border)}
+.question:first-child{padding-top:0}
+.question:last-child{border-bottom:0;padding-bottom:0}
+.question-title{font-size:13px;font-weight:750;margin:0 0 13px}
+.q-number{color:var(--gold);margin-right:7px}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.option{
+    display:flex;align-items:flex-start;gap:10px;padding:12px;
+    border:1px solid #303b5c;border-radius:10px;background:var(--input);
+    color:#cbd4e9;font-size:12px;cursor:pointer;transition:.18s
+}
+.option:hover{border-color:#697aa8;background:#17213b}
+.option:has(input:checked){border-color:var(--purple);background:#292545;color:#fff}
+.option input{accent-color:var(--gold);margin-top:3px;flex-shrink:0}
+.question small{display:block;margin-top:9px;color:#8794b0;font-size:10px}
+.bottom-card{padding:21px;margin:22px 0 35px}
+.bottom-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bottom-card p{font-size:11px;color:var(--muted);max-width:530px;margin:0}
+.nav-buttons{display:flex;gap:9px}
+.message{display:none;margin-top:14px;padding:12px;border-radius:9px;font-size:12px}
+.message.show{display:block}
+.message.error{color:#ffc0c0;background:#5b202533;border:1px solid #ff828255}
+.message.success{color:#a6f4d8;background:#1b746122;border:1px solid #72d9c455}
+footer{text-align:center;color:#7f8aa6;font-size:11px;padding:0 15px 28px}
+footer strong{color:#b4bdd4}
+.skip{position:absolute;top:-100px;left:12px;background:var(--gold);color:#111;padding:10px;z-index:20}
+.skip:focus{top:12px}
+@media(max-width:600px){
+ .nav-inner{min-height:67px}
+ .brand-icon{width:42px;height:42px}
+ .brand-title{font-size:12px}
+ .brand-subtitle{font-size:8px;letter-spacing:.6px}
+ .container{width:calc(100% - 26px)}
+ .hero{padding-top:30px}
+ .options{grid-template-columns:1fr}
+ .section-head{padding:16px}
+ .section-body{padding:17px}
+ .voice-card{align-items:flex-start}
+ .actions{width:100%}
+ .actions .btn{flex:1}
+ .bottom-row{align-items:stretch;flex-direction:column}
+ .nav-buttons .btn{flex:1}
+ .nav-buttons{display:flex}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
+}
+</style>
+</head>
+
+<body>
+<a class="skip" href="#assessmentForm">Skip to assessment questions</a>
+<div class="page">
+
+<header class="navbar">
+    <div class="nav-inner">
+        <a class="brand" href="index.html">
+            <div class="brand-icon" aria-hidden="true">♧</div>
+            <div>
+                <div class="brand-title">GEORGE COLLEGE</div>
+                <div class="brand-subtitle">OF MANAGEMENT &amp; SCIENCE</div>
+            </div>
+        </a>
+        <a class="nav-link" href="profile.html">← Back to Profile</a>
+    </div>
+</header>
+
+<main class="container">
+    <section class="hero">
+        <div class="eyebrow"><span class="dot"></span> YOUR PERSONALITY &amp; POTENTIAL</div>
+        <h1>Discover your <span class="gradient">strengths.</span><br>Understand your potential.</h1>
+        <p>
+            Answer these questions honestly. There are no right or wrong answers.
+            Your responses help you reflect on your interests, learning preferences,
+            personal strengths and future aspirations.
+        </p>
+    </section>
+
+    <section class="voice-card" aria-label="Voice assistance">
+        <div>
+            <strong>🔊 English Voice Assistance</strong>
+            <p>Listen to the instructions or read the current section aloud.</p>
+        </div>
+        <div class="actions">
+            <button class="btn gold" type="button" id="listenBtn">▶ Listen</button>
+            <button class="btn" type="button" id="readBtn">Read Section</button>
+            <button class="btn" type="button" id="stopBtn">■ Stop</button>
+        </div>
+        <p class="status" id="voiceStatus" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="progress-card" aria-label="Assessment progress">
+        <div class="progress-top">
+            <strong>Assessment progress</strong>
+            <span class="percent" id="percent">0%</span>
+        </div>
+        <div class="track" id="progressTrack" role="progressbar"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+             aria-label="Questions answered">
+            <div class="fill" id="progressFill"></div>
+        </div>
+        <div class="progress-caption" id="progressCaption">0 of 20 questions answered</div>
+    </section>
+
+    <nav class="section-tabs" aria-label="Assessment sections" id="sectionTabs">
+        <button class="tab active" type="button" data-section="0">01 · Personality</button>
+        <button class="tab" type="button" data-section="1">02 · Strengths</button>
+        <button class="tab" type="button" data-section="2">03 · Learning</button>
+        <button class="tab" type="button" data-section="3">04 · Interests</button>
+        <button class="tab" type="button" data-section="4">05 · Goals</button>
+    </nav>
+
+    <form id="assessmentForm" novalidate>
+        <div id="questionContainer"></div>
+
+        <section class="bottom-card">
+            <div class="bottom-row">
+                <p>
+                    Take your time. Your answers should reflect your own preferences.
+                    Required questions are marked with an asterisk.
+                </p>
+                <div class="nav-buttons">
+                    <button class="btn" type="button" id="previousBtn">← Previous</button>
+                    <button class="btn gold" type="button" id="nextBtn">Next Section →</button>
+                    <button class="btn gold" type="submit" id="submitBtn" hidden>Complete Assessment ✓</button>
+                </div>
+            </div>
+            <div id="formMessage" class="message" role="status" aria-live="polite"></div>
+        </section>
+    </form>
+
+    <footer>
+        <strong>GEORGE COLLEGE OF MANAGEMENT &amp; SCIENCE</strong><br>
+        Student Profile Mapping · Discover your strengths. Shape your future.
+    </footer>
+</main>
+</div>
+
+<script>
+"use strict";
+
+/* --------------------------------------------------
+   ASSESSMENT QUESTIONS
+-------------------------------------------------- */
+
+const sections = [
+    {
+        title: "Personality & Self-Awareness",
+        description: "Reflect on how you approach everyday situations.",
+        questions: [
+            {id:"q1", text:"When you face a new challenge, you usually…", options:[
+                "Start exploring possible solutions",
+                "Plan carefully before starting",
+                "Ask someone for guidance",
+                "Observe first and decide later"
+            ]},
+            {id:"q2", text:"In a group activity, you prefer to…", options:[
+                "Lead and organise the work",
+                "Contribute ideas and collaborate",
+                "Focus on a specific task",
+                "Support others behind the scenes"
+            ]},
+            {id:"q3", text:"When plans change unexpectedly, you usually…", options:[
+                "Adapt quickly",
+                "Need some time to adjust",
+                "Look for a clear alternative plan",
+                "Discuss the change with others"
+            ]},
+            {id:"q4", text:"Which statement describes you best?", options:[
+                "I enjoy trying new experiences",
+                "I prefer structure and routine",
+                "I enjoy understanding people",
+                "I like analysing how things work"
+            ]}
+        ]
+    },
+    {
+        title: "Strengths & Problem-Solving",
+        description: "Explore the abilities you feel most confident using.",
+        questions: [
+            {id:"q5", text:"Which activity feels most natural to you?", options:[
+                "Solving logical problems",
+                "Explaining ideas to others",
+                "Creating something new",
+                "Organising tasks and people"
+            ]},
+            {id:"q6", text:"When a task becomes difficult, you tend to…", options:[
+                "Keep trying different approaches",
+                "Break it into smaller steps",
+                "Ask for feedback",
+                "Take a break and return later"
+            ]},
+            {id:"q7", text:"What do people often appreciate about your work?", options:[
+                "Accuracy and attention to detail",
+                "Creativity and original ideas",
+                "Teamwork and communication",
+                "Reliability and organisation"
+            ]},
+            {id:"q8", text:"Which skill would you most like to strengthen?", options:[
+                "Critical thinking",
+                "Communication",
+                "Leadership",
+                "Creativity"
+            ]}
+        ]
+    },
+    {
+        title: "Learning Preferences",
+        description: "Identify the learning approaches that work best for you.",
+        questions: [
+            {id:"q9", text:"You understand a new topic best when you…", options:[
+                "See diagrams or visual examples",
+                "Listen to an explanation",
+                "Read notes and written examples",
+                "Practise it yourself"
+            ]},
+            {id:"q10", text:"When studying a difficult subject, you prefer…", options:[
+                "Working independently",
+                "Discussing it with classmates",
+                "Following guided examples",
+                "Trying practical exercises"
+            ]},
+            {id:"q11", text:"Which study environment suits you best?", options:[
+                "A quiet place on my own",
+                "A small study group",
+                "A structured classroom",
+                "A practical lab or workshop"
+            ]},
+            {id:"q12", text:"How do you usually prepare for an important task?", options:[
+                "Create a plan and timeline",
+                "Practise repeatedly",
+                "Review notes and examples",
+                "Discuss ideas and ask questions"
+            ]}
+        ]
+    },
+    {
+        title: "Interests & Motivation",
+        description: "Explore activities and subjects that keep you engaged.",
+        questions: [
+            {id:"q13", text:"Which type of activity interests you most?", options:[
+                "Technology and coding",
+                "Business and management",
+                "Research and analysis",
+                "Design and creative work"
+            ]},
+            {id:"q14", text:"Which task would you be excited to try?", options:[
+                "Build a digital application",
+                "Plan a business idea",
+                "Study data to find patterns",
+                "Design a creative solution"
+            ]},
+            {id:"q15", text:"What motivates you most?", options:[
+                "Learning new skills",
+                "Solving meaningful problems",
+                "Working with and helping people",
+                "Achieving a challenging goal"
+            ]},
+            {id:"q16", text:"Which project would you choose?", options:[
+                "A technical project",
+                "A community or social project",
+                "A business case study",
+                "A creative presentation"
+            ]}
+        ]
+    },
+    {
+        title: "Career Aspirations & Growth",
+        description: "Think about the future you want to work towards.",
+        questions: [
+            {id:"q17", text:"What matters most in your future career?", options:[
+                "Opportunities to learn and grow",
+                "Creativity and independence",
+                "Stability and clear progression",
+                "Making a positive difference"
+            ]},
+            {id:"q18", text:"Which work setting appeals to you most?", options:[
+                "Technology or research team",
+                "Business or corporate team",
+                "Creative or design team",
+                "A role involving people and collaboration"
+            ]},
+            {id:"q19", text:"What would you most like help with?", options:[
+                "Choosing a suitable career path",
+                "Building technical skills",
+                "Improving confidence and communication",
+                "Planning further education"
+            ]},
+            {id:"q20", text:"How clear is your current career goal?", options:[
+                "I have a clear goal",
+                "I have a few possible directions",
+                "I am exploring different options",
+                "I would appreciate guidance"
+            ]}
+        ]
+    }
+];
+
+const container = document.getElementById("questionContainer");
+const form = document.getElementById("assessmentForm");
+const message = document.getElementById("formMessage");
+const previousBtn = document.getElementById("previousBtn");
+const nextBtn = document.getElementById("nextBtn");
+const submitBtn = document.getElementById("submitBtn");
+const voiceStatus = document.getElementById("voiceStatus");
+
+let currentSection = 0;
+
+/* --------------------------------------------------
+   RENDER QUESTIONS
+-------------------------------------------------- */
+
+function renderQuestions() {
+    container.innerHTML = sections.map((section, sectionIndex) => `
+        <section class="question-card"
+                 data-panel="${sectionIndex}"
+                 aria-labelledby="section-title-${sectionIndex}"
+                 ${sectionIndex === 0 ? "" : "hidden"}>
+            <div class="section-head">
+                <div class="section-num">
+                    ${String(sectionIndex + 1).padStart(2,"0")}
+                </div>
+                <div>
+                    <h2 id="section-title-${sectionIndex}">${section.title}</h2>
+                    <p>${section.description}</p>
+                </div>
+            </div>
+
+            <div class="section-body">
+                ${section.questions.map((q, qIndex) => `
+                    <fieldset class="question"
+                        style="border-left:0;border-right:0;border-top:0;border-radius:0;margin:0;min-width:0;padding-left:0;padding-right:0">
+
+                        <legend class="question-title">
+                            <span class="q-number">
+                                ${sectionIndex * 4 + qIndex + 1}.
+                            </span>
+                            ${q.text}
+                            <span style="color:var(--gold)" aria-label="required">*</span>
+                        </legend>
+
+                        <div class="options">
+                            ${q.options.map((option, optionIndex) => `
+                                <label class="option">
+                                    <input type="radio"
+                                           name="${q.id}"
+                                           value="${optionIndex + 1}"
+                                           required>
+                                    <span>${option}</span>
+                                </label>
+                            `).join("")}
+                        </div>
+                    </fieldset>
+                `).join("")}
+            </div>
+        </section>
+    `).join("");
+
+    container.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.addEventListener("change", updateProgress);
+    });
+}
+
+/* --------------------------------------------------
+   PROGRESS
+-------------------------------------------------- */
+
+function updateProgress() {
+    const total = sections.reduce(
+        (sum, section) => sum + section.questions.length, 0
+    );
+
+    let answered = 0;
+
+    sections.forEach(section => {
+        section.questions.forEach(question => {
+            if (form.querySelector(
+                `input[name="${question.id}"]:checked`
+            )) {
+                answered++;
+            }
+        });
+    });
+
+    const percent = Math.round((answered / total) * 100);
+
+    document.getElementById("progressFill").style.width = percent + "%";
+    document.getElementById("percent").textContent = percent + "%";
+    document.getElementById("progressTrack")
+        .setAttribute("aria-valuenow", percent);
+
+    document.getElementById("progressCaption").textContent =
+        `${answered} of ${total} questions answered`;
+
+    return answered;
+}
+
+/* --------------------------------------------------
+   SECTION NAVIGATION
+-------------------------------------------------- */
+
+function showSection(index) {
+    currentSection = Math.max(
+        0, Math.min(index, sections.length - 1)
+    );
+
+    container.querySelectorAll("[data-panel]").forEach(panel => {
+        panel.hidden =
+            Number(panel.dataset.panel) !== currentSection;
+    });
+
+    document.querySelectorAll(".tab").forEach(tab => {
+        const active =
+            Number(tab.dataset.section) === currentSection;
+
+        tab.classList.toggle("active", active);
+
+        if (active) {
+            tab.setAttribute("aria-current", "step");
+        } else {
+            tab.removeAttribute("aria-current");
+        }
+    });
+
+    previousBtn.disabled = currentSection === 0;
+    nextBtn.hidden = currentSection === sections.length - 1;
+    submitBtn.hidden = currentSection !== sections.length - 1;
+
+    message.className = "message";
+
+    window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+function missingQuestion(sectionIndex) {
+    const section = sections[sectionIndex];
+
+    return section.questions.find(question =>
+        !form.querySelector(
+            `input[name="${question.id}"]:checked`
+        )
+    );
+}
+
+function showMessage(text, type) {
+    message.textContent = text;
+    message.className = "message show " + type;
+}
+
+document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+        const target = Number(tab.dataset.section);
+
+        if (target > currentSection) {
+            for (let i = currentSection; i < target; i++) {
+                const missing = missingQuestion(i);
+
+                if (missing) {
+                    const questionNumber =
+                        sections[i].questions.indexOf(missing) + i * 4 + 1;
+
+                    showMessage(
+                        `Please answer question ${questionNumber} before moving ahead.`,
+                        "error"
+                    );
+
+                    form.querySelector(
+                        `input[name="${missing.id}"]`
+                    ).focus();
+
+                    return;
+                }
+            }
+        }
+
+        showSection(target);
+    });
+});
+
+previousBtn.addEventListener("click", () => {
+    showSection(currentSection - 1);
+});
+
+nextBtn.addEventListener("click", () => {
+    const missing = missingQuestion(currentSection);
+
+    if (missing) {
+        showMessage(
+            "Please answer all questions in this section before continuing.",
+            "error"
+        );
+
+        form.querySelector(
+            `input[name="${missing.id}"]`
+        ).focus();
+
+        return;
+    }
+
+    showSection(currentSection + 1);
+});
+
+/* --------------------------------------------------
+   VOICE ASSISTANCE
+-------------------------------------------------- */
+
+function stopVoice() {
+    if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+    }
+
+    voiceStatus.textContent = "Voice playback stopped.";
+}
+
+function speak(text) {
+    if (!("speechSynthesis" in window)) {
+        voiceStatus.textContent =
+            "Voice assistance is not supported in this browser.";
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-IN";
+    utterance.rate = 0.9;
+
+    const voices = window.speechSynthesis.getVoices();
+
+    const voice =
+        voices.find(v => v.lang.toLowerCase() === "en-in") ||
+        voices.find(v => v.lang.toLowerCase().startsWith("en"));
+
+    if (voice) utterance.voice = voice;
+
+    utterance.onstart = () => {
+        voiceStatus.textContent = "Playing English instructions.";
+    };
+
+    utterance.onend = () => {
+        voiceStatus.textContent = "Voice instructions completed.";
+    };
+
+    utterance.onerror = () => {
+        voiceStatus.textContent = "Voice playback ended.";
+    };
+
+    window.speechSynthesis.speak(utterance);
+}
+
+document.getElementById("listenBtn").addEventListener("click", () => {
+    speak(
+        "Welcome to the Student Profile Mapping assessment at George College of Management and Science. " +
+        "There are five sections and twenty questions. Choose one option for every question. " +
+        "There are no right or wrong answers. Choose the option that best reflects your preferences. " +
+        "Use Next Section to continue and Previous to return. " +
+        "Complete all questions before submitting your assessment."
+    );
+});
+
+document.getElementById("readBtn").addEventListener("click", () => {
+    const section = sections[currentSection];
+
+    const text = section.title + ". " +
+        section.description + ". " +
+        section.questions.map((question, index) =>
+            "Question " + (currentSection * 4 + index + 1) + ". " +
+            question.text + " Options: " +
+            question.options.join(". ")
+        ).join(". ");
+
+    speak(text);
+});
+
+document.getElementById("stopBtn").addEventListener("click", stopVoice);
+
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden && "speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+    }
+});
+
+/* --------------------------------------------------
+   LOAD STUDENT DETAILS
+-------------------------------------------------- */
+
+function readStoredObject(keys) {
+    for (const key of keys) {
+        const value =
+            sessionStorage.getItem(key) ||
+            localStorage.getItem(key);
+
+        if (value) {
+            try {
+                const parsed = JSON.parse(value);
+
+                if (parsed && typeof parsed === "object") {
+                    return parsed;
+                }
+            } catch (error) {
+                console.warn("Could not read stored data:", key);
+            }
+        }
+    }
+
+    return {};
+}
+
+function getStudentData() {
+    const login = readStoredObject([
+        "spmStudent"
+    ]);
+
+    const profile = readStoredObject([
+        "spmStudentProfile",
+        "spmProfile",
+        "studentProfile"
+    ]);
+
+    const localStudentId =
+        localStorage.getItem("studentId") || "";
+
+    const rollNumber = String(
+        profile.studentId ||
+        profile.rollNumber ||
+        login.studentId ||
+        login.rollNumber ||
+        login.roll ||
+        localStudentId ||
+        ""
+    ).trim();
+
+    return {
+        login,
+        profile,
+        rollNumber
+    };
+}
+
+/* --------------------------------------------------
+   GOOGLE APPS SCRIPT CONFIGURATION
+-------------------------------------------------- */
+
+
+function getAppsScriptEndpoint() {
+    const APPS_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbz-39Ka3oVpK5ArGxrAfsUsUHD94JoOPjUyGhl0mHcqCSoyT1glSxgpLDohKERSPItp/exec";
+
+    if (
+        window.SPM_CONFIG &&
+        typeof window.SPM_CONFIG.appsScriptUrl === "string" &&
+        window.SPM_CONFIG.appsScriptUrl.trim() !== ""
+    ) {
+        return window.SPM_CONFIG.appsScriptUrl.trim();
+    }
+
+    if (
+        typeof window.API_URL === "string" &&
+        window.API_URL.trim() !== ""
+    ) {
+        return window.API_URL.trim();
+    }
+
+    return APPS_SCRIPT_URL;
+}
+
+/* --------------------------------------------------
+   SUBMIT AND SAVE ASSESSMENT
+-------------------------------------------------- */
+
+form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (submitBtn.disabled) return;
+
+    const allQuestions = sections.flatMap(
+        section => section.questions
+    );
+
+    const missing = allQuestions.find(question =>
+        !form.querySelector(
+            `input[name="${question.id}"]:checked`
+        )
+    );
+
+    if (missing) {
+        const sectionIndex = sections.findIndex(section =>
+            section.questions.some(
+                question => question.id === missing.id
+            )
+        );
+
+        showSection(sectionIndex);
+
+        showMessage(
+            "Please answer every question before completing the assessment.",
+            "error"
+        );
+
+        form.querySelector(
+            `input[name="${missing.id}"]`
+        ).focus();
+
+        return;
+    }
+
+    const student = getStudentData();
+    const endpoint = getAppsScriptEndpoint();
+
+    if (!endpoint) {
+        showMessage(
+            "Google Apps Script URL is missing. Please check your existing configuration.",
+            "error"
+        );
+        return;
+    }
+
+    if (!student.rollNumber) {
+        showMessage(
+            "Student roll number was not found. Please return to your profile and check your student details.",
+            "error"
+        );
+        return;
+    }
+
+    const answers = {};
+
+    sections.forEach(section => {
+        section.questions.forEach(question => {
+            const selected = form.querySelector(
+                `input[name="${question.id}"]:checked`
+            );
+
+            answers[question.id] = {
+                question: question.text,
+                selectedOption: Number(selected.value),
+                answer: question.options[
+                    Number(selected.value) - 1
+                ]
+            };
+        });
+    });
+
+    const assessment = {
+        answers: answers,
+        totalQuestions: allQuestions.length,
+        answeredQuestions: updateProgress(),
+        completedAt: new Date().toISOString()
+    };
+
+    const payload = {
+        action: "saveAssessment",
+        rollNumber: student.rollNumber,
+        login: student.login,
+        profile: student.profile,
+        assessment: assessment,
+        report: {
+            rollNumber: student.rollNumber,
+            studentName:
+                student.profile.studentName ||
+                student.login.name ||
+                student.login.studentName ||
+                "",
+            totalQuestions: assessment.totalQuestions,
+            answeredQuestions: assessment.answeredQuestions,
+            completedAt: assessment.completedAt,
+            answers: answers
+        },
+        source: "Student Profile Mapping"
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Saving Assessment...";
+
+    try {
+        // Save a local copy for report.html.
+        sessionStorage.setItem(
+            "spmAssessment",
+            JSON.stringify(assessment)
+        );
+
+        sessionStorage.setItem(
+            "spmAssessmentPayload",
+            JSON.stringify(payload)
+        );
+
+        /*
+         * Apps Script POST uses text/plain with no-cors,
+         * consistent with the existing profile submission.
+         * The browser cannot read or verify the server response.
+         */
+        await fetch(endpoint, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        showMessage(
+            "Assessment submission was sent. Opening your report...",
+            "success"
+        );
+
+        submitBtn.textContent = "Opening Report...";
+
+        setTimeout(() => {
+            window.location.href = "report.html";
+        }, 1200);
+
+    } catch (error) {
+        console.error("Assessment submission error:", error);
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Complete Assessment ✓";
+
+        showMessage(
+            "The submission could not be sent. Check your internet connection and try again.",
+            "error"
+        );
+    }
+});
+
+/* --------------------------------------------------
+   INITIALISE PAGE
+-------------------------------------------------- */
+
+renderQuestions();
+updateProgress();
+showSection(0);
+</script>
+
+</body>
+</html>

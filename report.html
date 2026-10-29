@@ -1,0 +1,601 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Profile Mapping | Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --bg:#0b1020; --card:#141c31; --border:#293550;
+  --text:#eef2ff; --muted:#a5b1cc; --accent:#a78bfa;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; font-family:Arial,sans-serif;
+  background:linear-gradient(145deg,#0b1020,#17112c);
+  color:var(--text);
+}
+header { padding:26px 5%; border-bottom:1px solid var(--border); }
+header h1 { margin:0 0 8px; }
+header p,.muted,small { color:var(--muted); }
+main { width:min(1200px,92%); margin:28px auto; }
+.card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:18px; padding:22px; margin-bottom:20px;
+}
+h2 { font-size:19px; margin:0 0 18px; }
+.controls { display:flex; flex-wrap:wrap; gap:10px; align-items:end; }
+.field { flex:1; min-width:200px; }
+label { display:block; margin-bottom:8px; color:var(--muted); }
+input {
+  width:100%; padding:13px; background:#0b1225;
+  border:1px solid var(--border); border-radius:10px; color:white;
+}
+button {
+  padding:12px 17px; border:0; border-radius:10px;
+  cursor:pointer; background:var(--accent); font-weight:bold;
+}
+.secondary { background:#26334f; color:white; }
+.status,.notice {
+  margin-top:14px; padding:12px; border-radius:10px;
+  background:#0b1225; color:var(--muted); line-height:1.6;
+  overflow-wrap:anywhere;
+}
+.notice { border-left:3px solid var(--accent); }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.stat { padding:17px; background:#0c1428; border:1px solid var(--border); border-radius:13px; }
+.value { font-size:25px; font-weight:bold; margin:8px 0; overflow-wrap:anywhere; }
+.chart-box { position:relative; height:330px; }
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; min-width:430px; }
+th,td { text-align:left; padding:13px 10px; border-bottom:1px solid var(--border); }
+th { color:var(--muted); font-weight:normal; }
+.bar-track { height:8px; min-width:90px; background:#293550; border-radius:20px; overflow:hidden; }
+.bar-fill { height:100%; background:linear-gradient(90deg,#a78bfa,#67e8f9); }
+.hidden { display:none!important; }
+footer { text-align:center; color:var(--muted); padding:20px; }
+@media(max-width:700px) {
+  .grid,.stats { grid-template-columns:1fr; }
+  .chart-box { height:290px; }
+  .card { padding:16px; }
+}
+@media print {
+  body { background:white; color:#111; }
+  .card,.stat { background:white; color:#111; break-inside:avoid; }
+  .controls,.no-print { display:none!important; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Student Profile Mapping</h1>
+  <p>Personalised Student Profile &amp; Assessment Report</p>
+</header>
+
+<main>
+<section class="card">
+  <h2>Find Your Report</h2>
+  <div class="controls">
+    <div class="field">
+      <label for="rollInput">Student Roll Number</label>
+      <input id="rollInput" placeholder="Enter your roll number">
+    </div>
+    <button id="loadBtn">Load Report</button>
+    <button class="secondary" id="printBtn">Print / Save PDF</button>
+  </div>
+  <div id="status" class="status">Enter your roll number and click Load Report.</div>
+</section>
+
+<section id="reportArea" class="hidden">
+  <section class="card">
+    <h2>Student Information</h2>
+    <div class="stats">
+      <div class="stat"><small>Student Name</small><div class="value" id="studentName">—</div></div>
+      <div class="stat"><small>Roll Number</small><div class="value" id="studentRoll">—</div></div>
+      <div class="stat"><small>Department</small><div class="value" id="studentDepartment">—</div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Assessment Overview</h2>
+    <div class="stats">
+      <div class="stat">
+        <small> gQ</small>
+        <div class="value" id="gqScore">N/A</div>
+        <small>Mean of dimension scores</small>
+      </div>
+      <div class="stat">
+        <small> mQ</small>
+        <div class="value" id="mqScore">N/A</div>
+        <small>Median of dimension scores</small>
+      </div>
+      <div class="stat">
+        <small>Assessment Status</small>
+        <div class="value" id="assessmentStatus">—</div>
+      </div>
+    </div>
+    <p id="assessmentNotice" class="notice"></p>
+    <p class="muted">
+      These are custom radar-derived estimates, not validated intelligence
+      or psychological measurements.
+    </p>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Seven-Dimension Profile Map</h2>
+      <div class="chart-box"><canvas id="radarChart"></canvas></div>
+    </section>
+    <section class="card">
+      <h2>Estimated gQ vs mQ Comparison</h2>
+      <div class="chart-box"><canvas id="comparisonChart"></canvas></div>
+      <p class="muted">Both values are calculated from the available dimension scores.</p>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>Dimension-wise Profile Scores</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Dimension</th><th>Score</th><th>Visual Level</th></tr></thead>
+        <tbody id="dimensionRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Personalised Interpretation</h2>
+    <div id="interpretation" class="muted"></div>
+  </section>
+
+  <section class="card">
+    <h2>Student Profile Details</h2>
+    <div id="profileDetails" class="muted"></div>
+  </section>
+
+  <section class="card">
+    <h2>Peer Group Comparison</h2>
+    <p id="peerMessage" class="notice"></p>
+  </section>
+
+  <section class="card no-print">
+    <h2>Listen to Your Report</h2>
+    <div class="controls">
+      <button id="speakBtn">Read Report Aloud</button>
+      <button class="secondary" id="stopBtn">Stop Voice</button>
+    </div>
+  </section>
+</section>
+</main>
+<footer>Student Profile Mapping · Personalised Learning Support</footer>
+
+<script>
+"use strict";
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz-39Ka3oVpK5ArGxrAfsUsUHD94JoOPjUyGhl0mHcqCSoyT1glSxgpLDohKERSPItp/exec";
+
+const DIMENSIONS = [
+  "Academic",
+  "Knowledge Exploration",
+  "Analytical Thinking",
+  "Task Management",
+  "Thinking",
+  "Communication",
+  "Tool-Based Interests"
+];
+
+const $ = id => document.getElementById(id);
+let radarChart = null;
+let comparisonChart = null;
+let currentReportText = "";
+
+function setStatus(message, error = false) {
+  $("status").textContent = message;
+  $("status").style.color = error ? "#fca5a5" : "#a5b1cc";
+}
+
+function firstValue(objects, keys) {
+  for (const obj of objects) {
+    if (!obj || typeof obj !== "object") continue;
+    for (const key of keys) {
+      if (obj[key] !== undefined && obj[key] !== null && obj[key] !== "") {
+        return obj[key];
+      }
+    }
+  }
+  return null;
+}
+
+function safeText(value) {
+  if (value === null || value === undefined || value === "") return "—";
+  return typeof value === "object" ? JSON.stringify(value) : String(value);
+}
+
+function normaliseKey(key) {
+  return String(key).toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function findNestedValue(root, aliases) {
+  const wanted = new Set(aliases.map(normaliseKey));
+  const queue = [root];
+  const seen = new Set();
+
+  while (queue.length) {
+    const obj = queue.shift();
+    if (!obj || typeof obj !== "object" || seen.has(obj)) continue;
+    seen.add(obj);
+
+    for (const key of Object.keys(obj)) {
+      if (wanted.has(normaliseKey(key))) {
+        const value = obj[key];
+        if (value !== null && value !== undefined && value !== "" &&
+            typeof value !== "object") return value;
+      }
+    }
+    for (const value of Object.values(obj)) {
+      if (value && typeof value === "object") queue.push(value);
+    }
+  }
+  return null;
+}
+
+function numericValue(value) {
+  if (value === null || value === undefined || value === "") return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+/* Custom answer-to-dimension rubric.
+   Each question option is scored by its selectedOption value (1-4). */
+const SCORING_RULES = [
+  { name:"Academic", items:[["q12",[1,3]],["q17",[1,3]],["q19",[4]]] },
+  { name:"Knowledge", items:[["q1",[1,4]],["q4",[4]],["q13",[3]],["q14",[3]],["q15",[1]]] },
+  { name:"Analytical", items:[["q1",[1,2,4]],["q4",[4]],["q5",[1]],["q6",[1,2]],["q8",[1]],["q14",[3]]] },
+  { name:"Task", items:[["q2",[1,3,4]],["q7",[1,4]],["q12",[1]],["q17",[3]]] },
+  { name:"Thinking", items:[["q1",[1,2,4]],["q4",[4]],["q5",[1]],["q6",[1,2]],["q8",[1]],["q14",[3]]] },
+  { name:"Communication", items:[["q2",[2,4]],["q5",[2]],["q6",[3]],["q7",[3]],["q10",[2]],["q12",[4]],["q15",[3]],["q18",[4]],["q19",[3]]] },
+  { name:"Tools", items:[["q9",[1,4]],["q10",[4]],["q11",[4]],["q13",[1]],["q14",[1]],["q16",[1]]] }
+];
+
+function calculateDimensionScoresFromAnswers(assessment) {
+  const answers = assessment?.answers;
+  if (!answers || typeof answers !== "object") return null;
+
+  return SCORING_RULES.map(rule => {
+    let answered = 0;
+    let matched = 0;
+
+    rule.items.forEach(([questionId, preferredOptions]) => {
+      const answer = answers[questionId];
+      if (!answer || answer.selectedOption === undefined) return;
+
+      const selected = Number(answer.selectedOption);
+      if (![1,2,3,4].includes(selected)) return;
+
+      answered++;
+      if (preferredOptions.includes(selected)) matched++;
+    });
+
+    return answered ? Math.round(matched / answered * 100) : null;
+  });
+}
+
+function extractDimensions(data) {
+  const sources = [data.report || {}, data.assessment || {}, data.results || {}, data];
+
+  const aliases = [
+    ["academic","academicScore","academicDimension","academicMarks"],
+    ["knowledge","knowledgeScore","knowledgeDimension","knowledgeMarks"],
+    ["intelligence","intelligenceScore","intelligenceDimension","intelligenceMarks"],
+    ["acceptTask","acceptTaskScore","taskAcceptance","acceptTaskDimension"],
+    ["think","thinkScore","thinking","thinkingScore","thinkDimension"],
+    ["communicate","communicateScore","communication","communicationScore"],
+    ["useTools","useToolsScore","tools","toolUsage","toolUsageScore"]
+  ];
+
+  const savedScores = aliases.map(names => {
+    for (const source of sources) {
+      const value = numericValue(findNestedValue(source, names));
+      if (value !== null) return Math.max(0, Math.min(100, value));
+    }
+    return null;
+  });
+
+  if (savedScores.some(value => value !== null)) return savedScores;
+  return calculateDimensionScoresFromAnswers(data.assessment || {});
+}
+
+/* gQ and mQ are calculated every time from the radar values.
+   gQ = arithmetic mean; mQ = median. These are project-defined proxies. */
+function calculateGqMq(scores) {
+  const valid = scores.filter(value =>
+    typeof value === "number" && Number.isFinite(value)
+  );
+
+  if (!valid.length) return { gq:null, mq:null };
+
+  const gq = Math.round(valid.reduce((sum, value) => sum + value, 0) / valid.length);
+  const sorted = [...valid].sort((a,b) => a-b);
+  const middle = Math.floor(sorted.length / 2);
+
+  const median = sorted.length % 2
+    ? sorted[middle]
+    : (sorted[middle - 1] + sorted[middle]) / 2;
+
+  return { gq, mq:Math.round(median) };
+}
+
+function renderDimensionTable(scores) {
+  const tbody = $("dimensionRows");
+  tbody.replaceChildren();
+
+  DIMENSIONS.forEach((name, index) => {
+    const score = scores[index];
+    const row = document.createElement("tr");
+    const nameCell = document.createElement("td");
+    const scoreCell = document.createElement("td");
+    const visualCell = document.createElement("td");
+
+    nameCell.textContent = name;
+    scoreCell.textContent = score === null ? "Not available" : score + "/100";
+
+    if (score === null) {
+      visualCell.textContent = "No score";
+    } else {
+      const track = document.createElement("div");
+      const fill = document.createElement("div");
+      const label = document.createElement("small");
+
+      track.className = "bar-track";
+      fill.className = "bar-fill";
+      fill.style.width = Math.max(0, Math.min(100, score)) + "%";
+      track.appendChild(fill);
+
+      label.textContent = score >= 70 ? "Higher alignment"
+        : score >= 40 ? "Moderate alignment" : "Lower alignment";
+
+      visualCell.append(track, label);
+    }
+
+    row.append(nameCell, scoreCell, visualCell);
+    tbody.appendChild(row);
+  });
+}
+
+function renderRadar(scores) {
+  if (radarChart) radarChart.destroy();
+  radarChart = null;
+  if (!scores || !scores.some(value => value !== null)) return;
+
+  radarChart = new Chart($("radarChart"), {
+    type:"radar",
+    data:{
+      labels:DIMENSIONS,
+      datasets:[{
+        label:"Indicative profile score",
+        data:scores,
+        spanGaps:false,
+        borderWidth:2,
+        pointRadius:4,
+        backgroundColor:"rgba(167,139,250,.20)",
+        borderColor:"#a78bfa",
+        pointBackgroundColor:"#67e8f9"
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      scales:{r:{
+        min:0,max:100,
+        ticks:{stepSize:20,color:"#a5b1cc",backdropColor:"transparent"},
+        grid:{color:"#293550"},
+        angleLines:{color:"#293550"},
+        pointLabels:{color:"#eef2ff"}
+      }},
+      plugins:{legend:{labels:{color:"#eef2ff"}}}
+    }
+  });
+}
+
+function renderComparison(gq, mq) {
+  if (comparisonChart) comparisonChart.destroy();
+  comparisonChart = null;
+  if (gq === null && mq === null) return;
+
+  comparisonChart = new Chart($("comparisonChart"), {
+    type:"bar",
+    data:{
+      labels:["Estimated gQ","Estimated mQ"],
+      datasets:[{
+        label:"Radar-derived estimate /100",
+        data:[gq,mq],
+        backgroundColor:["#a78bfa","#67e8f9"],
+        borderRadius:8
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      scales:{
+        y:{beginAtZero:true,max:100,ticks:{color:"#a5b1cc"},grid:{color:"#293550"}},
+        x:{ticks:{color:"#eef2ff"},grid:{display:false}}
+      },
+      plugins:{legend:{display:false}}
+    }
+  });
+}
+
+function renderInterpretation(scores, gq, mq) {
+  const valid = scores
+    .map((score,index)=>({name:DIMENSIONS[index],score}))
+    .filter(item=>item.score !== null);
+
+  if (!valid.length) {
+    $("interpretation").textContent =
+      "No usable answers or dimension scores were found. Check the saved assessment JSON.";
+    return;
+  }
+
+  const sorted = [...valid].sort((a,b)=>b.score-a.score);
+  $("interpretation").textContent =
+    "Highest alignment: " + sorted[0].name + " (" + sorted[0].score + "/100). " +
+    "Lowest alignment: " + sorted[sorted.length-1].name + " (" +
+    sorted[sorted.length-1].score + "/100). " +
+    "Estimated gQ: " + gq + "/100, calculated as the mean of available dimension scores. " +
+    "Estimated mQ: " + mq + "/100, calculated as their median. " +
+    "These are custom profile summaries, not validated intelligence or psychological measurements. " +
+    "A lower score does not prove a weakness.";
+}
+
+function renderProfileDetails(profile) {
+  const box = $("profileDetails");
+  box.replaceChildren();
+
+  const entries = Object.entries(profile || {}).filter(([key,value]) =>
+    !["password","token","secret","apikey"].includes(normaliseKey(key)) &&
+    value !== null && value !== undefined &&
+    typeof value !== "object" && String(value).trim() !== ""
+  );
+
+  if (!entries.length) {
+    box.textContent = "No additional profile details were found.";
+    return;
+  }
+
+  const table = document.createElement("table");
+  const tbody = document.createElement("tbody");
+
+  entries.forEach(([key,value]) => {
+    const row = document.createElement("tr");
+    const heading = document.createElement("th");
+    const cell = document.createElement("td");
+    heading.textContent = key.replace(/([A-Z])/g," $1");
+    cell.textContent = safeText(value);
+    row.append(heading,cell);
+    tbody.appendChild(row);
+  });
+
+  table.appendChild(tbody);
+  box.appendChild(table);
+}
+
+function showReport(payload, requestedRoll) {
+  const profile = payload.profile || {};
+  const login = payload.login || {};
+  const assessment = payload.assessment || {};
+  const report = payload.report || {};
+
+  $("studentName").textContent = safeText(firstValue(
+    [profile,login],["studentName","name","fullName"]
+  ));
+  $("studentRoll").textContent = safeText(firstValue(
+    [login,profile],["studentId","rollNumber","roll","studentRoll","rollNo"]
+  ) || requestedRoll);
+  $("studentDepartment").textContent = safeText(firstValue(
+    [profile,login],["department","stream","course","program"]
+  ));
+
+  const hasAssessment = payload.assessmentFound === true ||
+    Boolean(assessment.answers);
+
+  $("assessmentStatus").textContent = hasAssessment ? "Found" : "Missing";
+  $("assessmentNotice").textContent = hasAssessment
+    ? "Saved assessment found. Scores are calculated from stored answers when saved dimension scores are absent."
+    : "Assessment answers were not found. Complete the assessment and confirm that it was saved to Drive.";
+
+  const scores = extractDimensions({assessment,report,results:assessment.results || {}});
+  const {gq,mq} = calculateGqMq(scores);
+
+  $("gqScore").textContent = gq === null ? "N/A" : gq + "/100";
+  $("mqScore").textContent = mq === null ? "N/A" : mq + "/100";
+
+  renderDimensionTable(scores);
+  renderRadar(scores);
+  renderComparison(gq,mq);
+  renderInterpretation(scores,gq,mq);
+  renderProfileDetails(profile);
+
+  $("peerMessage").textContent =
+    "No peer-group scores are available. A real peer comparison requires actual comparison data.";
+
+  currentReportText =
+    "Student Profile Mapping report. Student name " + $("studentName").textContent +
+    ". Roll number " + $("studentRoll").textContent +
+    ". Estimated gQ " + (gq === null ? "not available" : gq + " out of 100") +
+    ". Estimated mQ " + (mq === null ? "not available" : mq + " out of 100") +
+    ". " + $("interpretation").textContent;
+
+  $("reportArea").classList.remove("hidden");
+}
+
+async function loadReport() {
+  const roll = $("rollInput").value.trim();
+  if (!roll) {
+    setStatus("Please enter your student roll number.",true);
+    return;
+  }
+
+  $("loadBtn").disabled = true;
+  $("reportArea").classList.add("hidden");
+  setStatus("Loading report from Google Drive...");
+
+  try {
+    const url = API_URL + "?action=getReport&roll=" +
+      encodeURIComponent(roll) + "&_=" + Date.now();
+
+    const response = await fetch(url,{method:"GET",cache:"no-store"});
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const payload = await response.json();
+    if (payload.success === false) {
+      throw new Error(payload.message || "Report could not be retrieved.");
+    }
+
+    showReport(payload,roll);
+    setStatus("Report loaded. Profile: " +
+      (payload.profileFound ? "found" : "not found") +
+      "; assessment: " + (payload.assessmentFound ? "found" : "not found") + ".");
+  } catch (error) {
+    setStatus("Could not load report: " + error.message +
+      ". Check the Apps Script URL, deployment access and saved Drive files.",true);
+    console.error(error);
+  } finally {
+    $("loadBtn").disabled = false;
+  }
+}
+
+$("loadBtn").addEventListener("click",loadReport);
+$("rollInput").addEventListener("keydown",event=>{
+  if(event.key === "Enter") loadReport();
+});
+$("printBtn").addEventListener("click",()=>window.print());
+
+$("speakBtn").addEventListener("click",()=>{
+  if (!("speechSynthesis" in window)) {
+    setStatus("Voice reading is not supported in this browser.",true);
+    return;
+  }
+  if (!currentReportText) {
+    setStatus("Load a report before using voice reading.",true);
+    return;
+  }
+  speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(currentReportText);
+  utterance.lang = "en-IN";
+  utterance.rate = 0.9;
+  const voices = speechSynthesis.getVoices();
+  utterance.voice = voices.find(v=>v.lang.toLowerCase()==="en-in") ||
+    voices.find(v=>v.lang.toLowerCase().startsWith("en")) || null;
+  speechSynthesis.speak(utterance);
+});
+
+$("stopBtn").addEventListener("click",()=>{
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,632 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0e1d">
+<title>Student Profile | George College</title>
+
+<style>
+:root {
+  --bg:#0b0e1d;--card:#151b31;--gold:#edc96c;
+  --purple:#a78bfa;--blue:#82a9ff;--text:#f3f4ff;
+  --muted:#a4aec6;--border:rgba(174,188,230,.15);
+  --input:#10172c;--teal:#72d9c4;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 "Segoe UI",Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.page{min-height:100vh;background:radial-gradient(ellipse at 5% 20%,rgba(65,53,139,.18),transparent 35%),radial-gradient(ellipse at 95% 65%,rgba(54,88,151,.13),transparent 32%),var(--bg)}
+.navbar{position:sticky;top:0;z-index:20;background:rgba(11,14,29,.94);backdrop-filter:blur(15px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1150px;width:calc(100% - 36px);min-height:74px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}
+.brand-icon{width:47px;height:47px;display:grid;place-items:center;border:1px solid #695b3a;border-radius:14px;color:var(--gold);font-size:23px;background:#191a2c}
+.brand-title{font-weight:850;font-size:15px;letter-spacing:.4px}
+.brand-subtitle{font-size:9px;letter-spacing:1.3px;color:var(--muted)}
+.nav-links{display:flex;gap:22px}
+.nav-links a{color:#b4bdd1;text-decoration:none;font-size:12px}
+.nav-links a:hover{color:var(--gold)}
+.container{max-width:1050px;width:calc(100% - 36px);margin:auto}
+.hero{padding:43px 0 22px;animation:rise .5s ease}
+.eyebrow{display:inline-flex;gap:9px;align-items:center;padding:8px 12px;border:1px solid #51452f;border-radius:8px;color:#e9d5a3;font-size:10px;font-weight:800;letter-spacing:1.3px}
+.dot{height:8px;width:8px;border-radius:50%;background:#78d6b0}
+h1{font-size:clamp(30px,5vw,44px);line-height:1.2;letter-spacing:-1px;margin:20px 0 12px}
+h1 span{background:linear-gradient(100deg,var(--gold),#d7a8f7,var(--blue));color:transparent;background-clip:text;-webkit-background-clip:text}
+.hero p{max-width:750px;color:var(--muted);line-height:1.85}
+.note{padding:13px 15px;border:1px solid var(--border);border-radius:11px;background:#141a30;color:#bfc9df;font-size:12px}
+.progress-card,.access-card,.form-card,.form-actions{border:1px solid var(--border);border-radius:16px;background:linear-gradient(135deg,#19213c,#11172b);margin:18px 0;overflow:hidden}
+.progress-card{padding:20px 22px}
+.progress-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:10px}
+.progress-percent{color:var(--gold);font-weight:800}
+.progress-track{height:6px;border-radius:10px;background:#2b3450;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--purple),var(--blue));transition:width .25s}
+.progress-caption{font-size:11px;color:var(--muted);margin-top:9px}
+.access-card{padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.access-card strong{display:block;margin-bottom:4px}
+.access-card p{font-size:11px;color:var(--muted);margin:0;max-width:500px}
+.voice-actions{display:flex;gap:8px;flex-wrap:wrap}
+.small-btn{cursor:pointer;padding:9px 12px;border-radius:9px;background:#1a2340;color:#e6eaff;border:1px solid #3a4568;font-size:11px;font-weight:750}
+.small-btn.primary{background:var(--gold);color:#17182a;border-color:var(--gold)}
+.voice-status{width:100%;color:var(--teal);font-size:11px}
+.section-heading{display:flex;align-items:center;gap:13px;padding:19px 23px;border-bottom:1px solid var(--border);background:rgba(37,43,73,.35)}
+.section-number{width:42px;height:42px;flex-shrink:0;display:grid;place-items:center;border:1px solid #655536;border-radius:12px;color:var(--gold);background:rgba(237,201,108,.08);font-weight:850}
+.section-heading h2{font-size:16px;margin:0 0 3px}
+.section-heading p{font-size:11px;color:var(--muted);margin:0}
+.section-body{padding:24px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:19px 20px}
+.field{min-width:0;display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+.field label{font-size:12px;font-weight:700;color:#dfe5fa}
+.required{color:var(--gold)}
+.optional{font-size:10px;font-weight:500;color:#8d9ab6}
+.field input,.field select,.field textarea{width:100%;min-height:44px;padding:11px 12px;border:1px solid #303b5c;border-radius:9px;background:var(--input);color:var(--text);font-size:12px}
+.field input::placeholder,.field textarea::placeholder{color:#8491ae}
+.field select option{background:#11172b;color:#fff}
+.field textarea{min-height:85px;resize:vertical;line-height:1.7}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(237,201,108,.09)}
+.helper{font-size:10px;color:#909db8}
+.check-row{display:flex;gap:10px;align-items:flex-start;font-size:12px;color:#c0cae1}
+.check-row input{accent-color:var(--gold);width:17px;height:17px;margin-top:3px;flex-shrink:0}
+.form-actions{padding:22px;margin:22px 0 35px}
+.action-row{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.privacy{max-width:520px;color:#9ca9c4;font-size:11px;line-height:1.8}
+.action-buttons{display:flex;gap:10px}
+.reset-btn,.continue-btn{min-height:45px;padding:11px 17px;border-radius:9px;font-size:12px;font-weight:800;cursor:pointer}
+.reset-btn{background:#1a223b;color:#e2e7f7;border:1px solid #3a4565}
+.continue-btn{background:var(--gold);color:#17182a;border:1px solid var(--gold)}
+.continue-btn:hover{background:#f6dda0;transform:translateY(-1px)}
+.continue-btn:disabled{opacity:.65;cursor:wait}
+.form-message{display:none;margin-top:15px;padding:12px;border-radius:9px;font-size:12px;overflow-wrap:anywhere}
+.form-message.visible{display:block}
+.form-message.error{color:#ffc0c0;background:#3b202b;border:1px solid #7e414b}
+.form-message.success{color:#a6f4d8;background:#17372f;border:1px solid #306d5b}
+.footer{text-align:center;padding:0 0 26px;color:#7f8aa6;font-size:11px}
+.footer strong{color:#b4bdd4}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:700px){
+ .nav-inner,.container{width:calc(100% - 26px)}
+ .nav-links{gap:10px}.nav-links a:not(:last-child){display:none}
+ .brand-title{font-size:12px}.brand-subtitle{font-size:8px}
+ .form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}
+ .section-body{padding:18px 15px}.section-heading{padding:17px}
+ .action-row{align-items:stretch;flex-direction:column}
+ .action-buttons{width:100%}.action-buttons button{flex:1}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+<header class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <div class="brand-icon" aria-hidden="true">✦</div>
+      <div>
+        <div class="brand-title">GEORGE COLLEGE</div>
+        <div class="brand-subtitle">OF MANAGEMENT &amp; SCIENCE</div>
+      </div>
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="index.html#about">About SPM</a>
+      <a href="#profileForm">Your Journey</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+<section class="hero">
+  <div class="eyebrow"><span class="dot"></span> YOUR STUDENT JOURNEY</div>
+  <h1>Tell us about <span>yourself.</span><br>Shape your future.</h1>
+  <p>Share your personal, academic and learning background to begin your personalised Student Profile Mapping experience. Required fields are marked with an asterisk.</p>
+  <div class="note">✦ Please answer honestly. Family income, caste and other sensitive background details are optional. Your answers should be used only for the stated educational purpose.</div>
+</section>
+
+<section class="progress-card" aria-label="Profile completion">
+  <div class="progress-top">
+    <strong>Your profile progress</strong>
+    <span class="progress-percent" id="progressPercent">0%</span>
+  </div>
+  <div class="progress-track" id="progressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Required fields completed">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-caption" id="progressCaption">Start by entering your personal details.</div>
+</section>
+
+<section class="access-card" aria-label="Voice assistance">
+  <div>
+    <strong>🔊 Accessibility &amp; Voice Assistance</strong>
+    <p>Listen to the instructions in English. Keyboard navigation and compatible screen readers are also supported.</p>
+  </div>
+  <div class="voice-actions">
+    <button type="button" class="small-btn primary" id="listenButton">▶ Listen to Instructions</button>
+    <button type="button" class="small-btn" id="readButton">Read Sections</button>
+    <button type="button" class="small-btn" id="stopButton">■ Stop</button>
+  </div>
+  <p class="voice-status" id="voiceStatus" role="status" aria-live="polite"></p>
+</section>
+
+<form id="profileForm" novalidate>
+
+<section class="form-card">
+  <div class="section-heading"><div class="section-number">01</div><div><h2>Personal Information</h2><p>Basic information for your student profile.</p></div></div>
+  <div class="section-body"><div class="form-grid">
+
+    <div class="field"><label for="studentName">Full Name <span class="required">*</span></label><input id="studentName" name="studentName" autocomplete="name" required placeholder="Enter full name"></div>
+
+    <div class="field"><label for="dob">Date of Birth <span class="optional">(Optional)</span></label><input id="dob" name="dob" type="date"></div>
+
+    <div class="field"><label for="gender">Gender <span class="optional">(Optional)</span></label><select id="gender" name="gender"><option value="">Select / Prefer not to say</option><option>Female</option><option>Male</option><option>Non-binary</option><option>Self-describe</option><option>Prefer not to disclose</option></select></div>
+
+    <div class="field"><label for="caste">Caste / Category <span class="optional">(Optional)</span></label><select id="caste" name="caste"><option value="">Prefer not to disclose</option><option>General</option><option>SC</option><option>ST</option><option>OBC</option><option>Other</option></select></div>
+
+    <div class="field"><label for="college">College Name <span class="required">*</span></label><input id="college" name="college" value="George College of Management & Science" required></div>
+
+    <div class="field"><label for="studentId">Student ID / Roll Number <span class="required">*</span></label><input id="studentId" name="studentId" required placeholder="Enter student ID"></div>
+
+    <div class="field"><label for="stream">Stream / Course <span class="required">*</span></label>
+      <select id="stream" name="stream" required>
+        <option value="">Select course</option>
+        <option value="BBA">BBA</option>
+        <option value="BCA">BCA</option>
+        <option value="BHM">BHM</option>
+        <option value="BOTM">BOTM</option>
+        <option value="BCA in AI & ML">BCA in AI &amp; ML</option>
+        <option value="BBA in Banking and Finance">BBA in Banking and Finance</option>
+      </select>
+    </div>
+
+    <div class="field"><label for="department">Department / Course <span class="required">*</span></label>
+      <select id="department" name="department" required>
+        <option value="">Select course</option>
+        <option value="BBA">BBA</option>
+        <option value="BCA">BCA</option>
+        <option value="BHM">BHM</option>
+        <option value="BOTM">BOTM</option>
+        <option value="BCA in AI & ML">BCA in AI &amp; ML</option>
+        <option value="BBA in Banking and Finance">BBA in Banking and Finance</option>
+      </select>
+    </div>
+
+    <div class="field"><label for="semester">Current Semester <span class="required">*</span></label>
+      <select id="semester" name="semester" required>
+        <option value="">Select semester</option>
+        <option>1st Semester</option>
+        <option>2nd Semester</option>
+        <option>3rd Semester</option>
+        <option>4th Semester</option>
+        <option>5th Semester</option>
+        <option>6th Semester</option>
+        <option>7th Semester</option>
+        <option>8th Semester</option>
+      </select>
+    </div>
+
+    <div class="field"><label for="session">Academic Session <span class="required">*</span></label>
+      <select id="session" name="academicSession" required>
+        <option value="">Select admission session</option>
+        <option value="2023-2027">2023-2027</option>
+        <option value="2024-2028">2024-2028</option>
+        <option value="2025-2029">2025-2029</option>
+        <option value="2026-2030">2026-2030</option>
+        <option value="2027-2031">2027-2031</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="field"><label for="state">State <span class="required">*</span></label><input id="state" name="state" required placeholder="Enter state"></div>
+    <div class="field"><label for="district">District <span class="optional">(Optional)</span></label><input id="district" name="district" placeholder="Enter district"></div>
+    <div class="field"><label for="city">City / Town <span class="optional">(Optional)</span></label><input id="city" name="city" placeholder="Enter city or town"></div>
+    <div class="field"><label for="phone">Phone Number <span class="optional">(Optional)</span></label><input id="phone" name="phone" type="tel" inputmode="tel" placeholder="Contact number"></div>
+    <div class="field full"><label for="email">Email Address <span class="required">*</span></label><input id="email" name="email" type="email" required autocomplete="email" placeholder="student@example.com"></div>
+    <div class="field full"><label for="address">Address <span class="optional">(Optional)</span></label><textarea id="address" name="address" placeholder="Enter address if needed"></textarea></div>
+  </div></div>
+</section>
+
+<section class="form-card">
+  <div class="section-heading"><div class="section-number">02</div><div><h2>Academic Background</h2><p>Previous academic performance and achievements.</p></div></div>
+  <div class="section-body"><div class="form-grid">
+    <div class="field"><label for="class10">Class X Percentage <span class="optional">(Optional)</span></label><input id="class10" name="class10Percentage" type="number" min="0" max="100" step=".01" placeholder="e.g. 78.5"></div>
+    <div class="field"><label for="class12">Class XII Percentage <span class="optional">(Optional)</span></label><input id="class12" name="class12Percentage" type="number" min="0" max="100" step=".01" placeholder="e.g. 82.0"></div>
+    <div class="field"><label for="qualification">Previous Qualification <span class="optional">(Optional)</span></label><select id="qualification" name="previousQualification"><option value="">Select qualification</option><option>Class X</option><option>Class XII</option><option>Diploma</option><option>Undergraduate Degree</option><option>Postgraduate Degree</option><option>Other</option></select></div>
+    <div class="field"><label for="skills">Technical / Professional Skills <span class="optional">(Optional)</span></label><input id="skills" name="skills" placeholder="Python, SQL, communication"></div>
+    <div class="field full"><label for="certifications">Projects, Certifications and Achievements <span class="optional">(Optional)</span></label><textarea id="certifications" name="certifications" placeholder="Mention relevant achievements or projects"></textarea></div>
+  </div></div>
+</section>
+
+<section class="form-card">
+  <div class="section-heading"><div class="section-number">03</div><div><h2>Living Background</h2><p>Home environment and access to learning resources. These answers are optional.</p></div></div>
+  <div class="section-body"><div class="form-grid">
+    <div class="field"><label for="ownHouse">Do you live in a house of your own?</label><select id="ownHouse" name="ownHouse"><option value="">Select</option><option>Yes</option><option>No</option><option>Prefer not to say</option></select></div>
+    <div class="field"><label for="vehicle">Does your family own a two-wheeler or four-wheeler?</label><select id="vehicle" name="familyVehicle"><option value="">Select</option><option>Two-wheeler</option><option>Four-wheeler</option><option>Both</option><option>Neither</option><option>Prefer not to say</option></select></div>
+    <div class="field"><label for="computer">Do you have a computer / laptop of your own?</label><select id="computer" name="ownComputer"><option value="">Select</option><option>Yes</option><option>No</option><option>Shared access</option></select></div>
+    <div class="field"><label for="newspaper">Does your family subscribe to a newspaper?</label><select id="newspaper" name="newspaper"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+    <div class="field"><label for="electricity">Does your house have an electricity connection?</label><select id="electricity" name="electricity"><option value="">Select</option><option>Yes</option><option>No</option><option>Sometimes / unreliable</option></select></div>
+    <div class="field"><label for="toilet">Does your house have a sanitation / toilet facility?</label><select id="toilet" name="toiletFacility"><option value="">Select</option><option>Yes</option><option>No</option><option>Prefer not to say</option></select></div>
+    <div class="field"><label for="trips">Has your family gone on a trip or excursion in the last 5 years?</label><select id="trips" name="familyTrip"><option value="">Select</option><option>Yes</option><option>No</option><option>Prefer not to say</option></select></div>
+    <div class="field"><label for="cable">Does your house have cable / TV connection?</label><select id="cable" name="cableConnection"><option value="">Select</option><option>Yes</option><option>No</option></select></div>
+    <div class="field"><label for="internet">Do you have reliable internet access for study?</label><select id="internet" name="internetAccess"><option value="">Select</option><option>Yes, personal</option><option>Yes, shared</option><option>Limited</option><option>No</option></select></div>
+    <div class="field"><label for="studySpace">Do you have a quiet place to study?</label><select id="studySpace" name="studySpace"><option value="">Select</option><option>Usually</option><option>Sometimes</option><option>Rarely</option><option>Prefer not to say</option></select></div>
+  </div></div>
+</section>
+
+<section class="form-card">
+  <div class="section-heading"><div class="section-number">04</div><div><h2>Parents' and Family Details</h2><p>Optional information about family education, employment and support.</p></div></div>
+  <div class="section-body"><div class="form-grid">
+    <div class="field"><label for="income">Annual Family Income</label><select id="income" name="annualFamilyIncome"><option value="">Prefer not to disclose</option><option>Below ₹1 lakh</option><option>₹1 lakh - ₹2.5 lakh</option><option>₹2.5 lakh - ₹5 lakh</option><option>₹5 lakh - ₹10 lakh</option><option>Above ₹10 lakh</option><option>Not sure</option></select></div>
+    <div class="field"><label for="familyType">Family Type</label><select id="familyType" name="familyType"><option value="">Select</option><option>Nuclear</option><option>Joint</option><option>Extended</option><option>Prefer not to say</option></select></div>
+    <div class="field"><label for="members">Number of Family Members</label><select id="members" name="familyMembers"><option value="">Select</option><option>1-2</option><option>3-4</option><option>5-6</option><option>7 or more</option></select></div>
+    <div class="field"><label for="siblings">Number of Siblings</label><select id="siblings" name="siblings"><option value="">Select</option><option>0</option><option>1</option><option>2</option><option>3 or more</option></select></div>
+    <div class="field"><label for="fatherIncome">Does your father earn a steady income?</label><select id="fatherIncome" name="fatherSteadyIncome"><option value="">Select</option><option>Yes</option><option>No</option><option>Not applicable</option><option>Prefer not to say</option></select></div>
+    <div class="field"><label for="fatherEducation">Has your father passed Madhyamik / H.S.?</label><select id="fatherEducation" name="fatherEducation"><option value="">Select</option><option>Madhyamik</option><option>Higher Secondary</option><option>Graduate or above</option><option>Below Madhyamik</option><option>Not applicable</option><option>Prefer not to say</option></select></div>
+    <div class="field"><label for="fatherInsurance">Does your father have a life insurance policy?</label><select id="fatherInsurance" name="fatherLifeInsurance"><option value="">Select</option><option>Yes</option><option>No</option><option>Not sure</option><option>Not applicable</option></select></div>
+    <div class="field"><label for="fatherATM">Does your father use an ATM card?</label><select id="fatherATM" name="fatherUsesATM"><option value="">Select</option><option>Yes</option><option>No</option><option>Not sure</option><option>Not applicable</option></select></div>
+    <div class="field"><label for="motherIncome">Does your mother earn an income?</label><select id="motherIncome" name="motherEarnsIncome"><option value="">Select</option><option>Yes</option><option>No</option><option>Not applicable</option><option>Prefer not to say</option></select></div>
+    <div class="field"><label for="motherEducation">Has your mother passed Madhyamik / H.S.?</label><select id="motherEducation" name="motherEducation"><option value="">Select</option><option>Madhyamik</option><option>Higher Secondary</option><option>Graduate or above</option><option>Below Madhyamik</option><option>Not applicable</option><option>Prefer not to say</option></select></div>
+    <div class="field"><label for="motherBank">Does your mother have a bank / post office account?</label><select id="motherBank" name="motherBankAccount"><option value="">Select</option><option>Yes</option><option>No</option><option>Not sure</option><option>Not applicable</option></select></div>
+    <div class="field"><label for="motherMobile">Does your mother use a mobile phone?</label><select id="motherMobile" name="motherUsesMobile"><option value="">Select</option><option>Yes</option><option>No</option><option>Shared phone</option><option>Not applicable</option></select></div>
+    <div class="field"><label for="fatherOccupation">Father's Occupation</label><select id="fatherOccupation" name="fatherOccupation"><option value="">Prefer not to say</option><option>Service / Salaried</option><option>Business</option><option>Self-employed</option><option>Agriculture</option><option>Retired</option><option>Not currently employed</option><option>Other</option></select></div>
+    <div class="field"><label for="motherOccupation">Mother's Occupation</label><select id="motherOccupation" name="motherOccupation"><option value="">Prefer not to say</option><option>Service / Salaried</option><option>Business</option><option>Self-employed</option><option>Homemaker</option><option>Agriculture</option><option>Retired</option><option>Other</option></select></div>
+    <div class="field full"><label for="support">Learning Resources or Academic Support Needed</label><textarea id="support" name="learningSupport" placeholder="For example: study resources, internet access or academic guidance"></textarea></div>
+  </div></div>
+</section>
+
+<section class="form-card">
+  <div class="section-heading"><div class="section-number">05</div><div><h2>Interests and Career Goals</h2><p>Help us understand your aspirations and development goals.</p></div></div>
+  <div class="section-body"><div class="form-grid">
+    <div class="field"><label for="careerField">Preferred Career Field</label><select id="careerField" name="careerField"><option value="">Not decided yet</option><option>Software Development</option><option>Data Analytics / Data Science</option><option>Artificial Intelligence / Machine Learning</option><option>Cybersecurity</option><option>Business / Management</option><option>Hospitality / Hotel Management</option><option>Travel / Tourism Management</option><option>Banking / Finance</option><option>Higher Studies / Research</option><option>Entrepreneurship</option><option>Other</option></select></div>
+    <div class="field"><label for="learningStyle">Preferred Learning Style</label><select id="learningStyle" name="learningStyle"><option value="">No preference</option><option>Practical activities</option><option>Visual explanations</option><option>Reading and notes</option><option>Group discussions</option><option>Audio explanations</option><option>Combination of methods</option></select></div>
+    <div class="field full"><label for="hobbies">Hobbies and Interests</label><textarea id="hobbies" name="hobbies" placeholder="Tell us about your interests"></textarea></div>
+    <div class="field full"><label for="careerGoal">Your Career Goal</label><textarea id="careerGoal" name="careerGoal" placeholder="What would you like to achieve in the next few years?"></textarea></div>
+    <div class="field full"><label for="improvement">Areas You Want to Improve</label><textarea id="improvement" name="improvementAreas" placeholder="For example: communication, confidence, coding or problem-solving"></textarea></div>
+  </div></div>
+</section>
+
+<section class="form-card">
+  <div class="section-heading"><div class="section-number">06</div><div><h2>Accessibility and Declaration</h2><p>Optional interface preferences and your confirmation.</p></div></div>
+  <div class="section-body"><div class="form-grid">
+    <div class="field"><label for="assistiveTech">Assistive Technology</label><select id="assistiveTech" name="assistiveTechnology"><option value="">Prefer not to say</option><option>None</option><option>Screen reader</option><option>Screen magnifier</option><option>Voice control</option><option>Keyboard navigation</option><option>Other</option></select></div>
+    <div class="field"><label for="voicePreference">Voice Assistance Preference</label><select id="voicePreference" name="voicePreference"><option>English</option><option>Text only</option></select></div>
+    <div class="field full"><label for="accessibilityNeeds">Additional Accessibility Requirements</label><textarea id="accessibilityNeeds" name="accessibilityNeeds" placeholder="Describe any interface adjustments that would help you. No diagnosis is required."></textarea></div>
+    <div class="field full"><label class="check-row" for="consent"><input id="consent" name="consent" type="checkbox" required><span>I confirm that the information provided is accurate to the best of my knowledge and understand that it will be used for the Student Profile Mapping process. <span class="required">*</span></span></label></div>
+  </div></div>
+</section>
+
+<section class="form-actions">
+  <div class="action-row">
+    <div class="privacy">✦ Family income, caste and accessibility details are optional. Do not enter passwords, bank account numbers or other unnecessary sensitive information.</div>
+    <div class="action-buttons">
+      <button type="reset" class="reset-btn">Clear Form</button>
+      <button type="submit" class="continue-btn" id="continueButton">Continue to Assessment →</button>
+    </div>
+  </div>
+  <div class="form-message" id="formMessage" role="status" aria-live="polite"></div>
+</section>
+</form>
+
+<footer class="footer">
+  <strong>GEORGE COLLEGE OF MANAGEMENT &amp; SCIENCE</strong><br>
+  Student Profile Mapping · Discover your strengths. Shape your future.
+</footer>
+</main>
+</div>
+
+<script src="js/config.js"></script>
+<script>
+"use strict";
+
+const form = document.getElementById("profileForm");
+const message = document.getElementById("formMessage");
+const progressFill = document.getElementById("progressFill");
+const progressPercent = document.getElementById("progressPercent");
+const progressTrack = document.getElementById("progressTrack");
+const progressCaption = document.getElementById("progressCaption");
+const voiceStatus = document.getElementById("voiceStatus");
+const continueButton = document.getElementById("continueButton");
+
+const requiredIds = [
+  "studentName", "college", "studentId", "stream",
+  "department", "semester", "session", "state", "email", "consent"
+];
+
+const requiredFields = requiredIds
+  .map(id => document.getElementById(id))
+  .filter(Boolean);
+
+function showMessage(text, type) {
+  message.textContent = text;
+  message.className = "form-message visible " + type;
+}
+
+function updateProgress() {
+  const completed = requiredFields.filter(field => {
+    if (field.type === "checkbox") return field.checked;
+    return field.value.trim() !== "";
+  }).length;
+
+  const percent = Math.round(completed / requiredFields.length * 100);
+  progressFill.style.width = percent + "%";
+  progressPercent.textContent = percent + "%";
+  progressTrack.setAttribute("aria-valuenow", percent);
+  progressCaption.textContent = percent === 100
+    ? "All required fields are complete. You can continue."
+    : `${completed} of ${requiredFields.length} required fields completed.`;
+}
+
+form.querySelectorAll("input,select,textarea").forEach(field => {
+  field.addEventListener("input", updateProgress);
+  field.addEventListener("change", updateProgress);
+});
+
+/* Keep Stream and Department/Course synchronised. */
+const streamSelect = document.getElementById("stream");
+const departmentSelect = document.getElementById("department");
+
+streamSelect.addEventListener("change", () => {
+  departmentSelect.value = streamSelect.value;
+  updateProgress();
+});
+
+departmentSelect.addEventListener("change", () => {
+  streamSelect.value = departmentSelect.value;
+  updateProgress();
+});
+
+function prefillStudentDetails() {
+  let student = {};
+
+  try {
+    student = JSON.parse(sessionStorage.getItem("spmStudent") || "{}");
+  } catch (error) {
+    student = {};
+  }
+
+  const name = student.name || student.studentName || "";
+  const roll = student.studentId || student.rollNumber || student.roll || "";
+  const email = student.email || student.studentEmail || "";
+
+  if (name && !document.getElementById("studentName").value) {
+    document.getElementById("studentName").value = name;
+  }
+
+  if (roll && !document.getElementById("studentId").value) {
+    document.getElementById("studentId").value = roll;
+  }
+
+  if (email && !document.getElementById("email").value) {
+    document.getElementById("email").value = email;
+  }
+
+  const course = student.course || student.department || student.stream || "";
+  if (course) {
+    const match = [...streamSelect.options].find(option =>
+      option.value.toLowerCase() === String(course).toLowerCase()
+    );
+
+    if (match) {
+      streamSelect.value = match.value;
+      departmentSelect.value = match.value;
+    }
+  }
+
+  updateProgress();
+}
+
+function speakEnglish(text) {
+  if (!("speechSynthesis" in window)) {
+    voiceStatus.textContent = "Voice assistance is unavailable in this browser.";
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-IN";
+  utterance.rate = 0.9;
+  utterance.pitch = 1;
+
+  const voices = window.speechSynthesis.getVoices();
+  const voice = voices.find(v => v.lang.toLowerCase() === "en-in") ||
+                voices.find(v => v.lang.toLowerCase().startsWith("en"));
+
+  if (voice) utterance.voice = voice;
+
+  utterance.onstart = () => {
+    voiceStatus.textContent = "Playing English instructions.";
+  };
+  utterance.onend = () => {
+    voiceStatus.textContent = "Voice instructions completed.";
+  };
+  utterance.onerror = event => {
+    if (!["canceled", "interrupted"].includes(event.error)) {
+      voiceStatus.textContent = "Voice playback could not be completed.";
+    }
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+document.getElementById("listenButton").addEventListener("click", () => {
+  speakEnglish(
+    "Welcome to Student Profile Mapping at George College of Management and Science. " +
+    "Please complete your personal information, academic background, living background, " +
+    "optional family details, interests and career goals. Fields marked with an asterisk are required. " +
+    "Caste and family income are optional. When you finish, confirm the declaration and select Continue to Assessment."
+  );
+});
+
+document.getElementById("readButton").addEventListener("click", () => {
+  speakEnglish(
+    "Section one: Personal Information. Section two: Academic Background. " +
+    "Section three: Living Background. Section four: Parents and Family Details. " +
+    "Section five: Interests and Career Goals. Section six: Accessibility and Declaration."
+  );
+});
+
+document.getElementById("stopButton").addEventListener("click", () => {
+  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  voiceStatus.textContent = "Voice playback stopped.";
+});
+
+form.addEventListener("reset", () => {
+  setTimeout(() => {
+    updateProgress();
+    message.className = "form-message";
+    message.textContent = "";
+    continueButton.disabled = false;
+    continueButton.textContent = "Continue to Assessment →";
+  }, 0);
+});
+
+function getAppsScriptEndpoint() {
+  /*
+    Supports common config.js formats:
+    window.SPM_CONFIG = { appsScriptUrl: "..." };
+    window.API_URL = "...";
+    const API_URL = "...";
+  */
+  if (window.SPM_CONFIG && window.SPM_CONFIG.appsScriptUrl) {
+    return window.SPM_CONFIG.appsScriptUrl;
+  }
+
+  if (window.API_URL) return window.API_URL;
+
+  try {
+    if (typeof API_URL !== "undefined") return API_URL;
+  } catch (error) {}
+
+  return "";
+}
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const invalid = requiredFields.find(field => {
+    if (field.type === "checkbox") return !field.checked;
+    return !field.value.trim() || !field.checkValidity();
+  });
+
+  if (invalid) {
+    invalid.focus();
+    invalid.reportValidity();
+    showMessage("Please complete all required fields and confirm the declaration.", "error");
+    return;
+  }
+
+  for (const id of ["class10", "class12"]) {
+    const field = document.getElementById(id);
+
+    if (field.value !== "") {
+      const value = Number(field.value);
+
+      if (!Number.isFinite(value) || value < 0 || value > 100) {
+        field.focus();
+        showMessage("Class X and Class XII percentages must be between 0 and 100.", "error");
+        return;
+      }
+    }
+  }
+
+  if (streamSelect.value !== departmentSelect.value) {
+    showMessage("Please select the same course in both course fields.", "error");
+    return;
+  }
+
+  const profile = {};
+
+  form.querySelectorAll("input,select,textarea").forEach(field => {
+    if (!field.name) return;
+    profile[field.name] = field.type === "checkbox"
+      ? field.checked
+      : field.value.trim();
+  });
+
+  profile.savedAt = new Date().toISOString();
+  profile.source = "Student Profile Mapping";
+
+  let loginStudent = {};
+
+  try {
+    loginStudent = JSON.parse(sessionStorage.getItem("spmStudent") || "{}");
+  } catch (error) {
+    loginStudent = {};
+  }
+
+  profile.loginStudentId = loginStudent.studentId || profile.studentId;
+  profile.loginEmail = loginStudent.email || profile.email;
+
+  try {
+    const profileJSON = JSON.stringify(profile);
+
+    sessionStorage.setItem("spmStudentProfile", profileJSON);
+    sessionStorage.setItem("spmProfile", profileJSON);
+    sessionStorage.setItem("studentProfile", profileJSON);
+
+    const endpoint = getAppsScriptEndpoint();
+
+    if (!endpoint || !/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(endpoint)) {
+      showMessage(
+        "The profile is saved in this browser session, but the Apps Script URL is missing or invalid. Check js/config.js.",
+        "error"
+      );
+      return;
+    }
+
+    continueButton.disabled = true;
+    continueButton.textContent = "Sending Profile...";
+
+    /*
+      no-cors does not let the browser read the Apps Script response.
+      Therefore, do not claim permanent Drive storage has been verified.
+    */
+    await fetch(endpoint, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "saveProfile",
+        profile: profile,
+        login: {
+          ...loginStudent,
+          name: loginStudent.name || profile.studentName,
+          studentId: profile.studentId,
+          email: profile.email,
+          department: profile.department,
+          stream: profile.stream,
+          semester: profile.semester,
+          academicSession: profile.academicSession
+        },
+        source: "Student Profile Mapping"
+      })
+    });
+
+    showMessage(
+      "Profile submission was sent. Opening your assessment. Check Google Drive to confirm that the JSON file was created.",
+      "success"
+    );
+
+    setTimeout(() => {
+      window.location.href = new URL("assessment.html", window.location.href).href;
+    }, 1200);
+
+  } catch (error) {
+    continueButton.disabled = false;
+    continueButton.textContent = "Continue to Assessment →";
+
+    showMessage(
+      "The profile could not be sent. Check your internet connection and Apps Script deployment, then try again.",
+      "error"
+    );
+  }
+});
+
+prefillStudentDetails();
+updateProgress();
+</script>
+</body>
+</html>
